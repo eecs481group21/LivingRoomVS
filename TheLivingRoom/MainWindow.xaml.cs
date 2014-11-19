@@ -21,7 +21,7 @@ namespace TheLivingRoom
     /// </summary>
     public partial class MainWindow : Window
     {
-        private KinectSensor _sensor;
+        private Kinect _kinect;
         private DepthImagePixel[] _depthImagePixels;
         private Shape _lastHead = null;
         private Shape _lastHand;
@@ -31,56 +31,7 @@ namespace TheLivingRoom
         public MainWindow()
         {
             InitializeComponent();
-        }
-
-        /*****************************************************************
-         * Function: InitKinect
-         * Description: Initializes the Kinect to begin recieving input.
-         * This function should only be called once on program startup or
-         * after the kinect has been stopped.
-         * Parameters: None
-        ******************************************************************/
-        private bool InitKinect()
-        {
-            // Make sure a Kinect is connected before assigning it
-            if (KinectSensor.KinectSensors.Count > 0)
-            {
-                _sensor = KinectSensor.KinectSensors[0];
-            }
-            else
-            {
-                return false;
-            }
-
-            _sensor.Start();
-            // Get color image data from the Kinect
-            _sensor.ColorStream.Enable();
-            // Get depth data from the Kinect
-            _sensor.DepthStream.Range = DepthRange.Default;
-            _sensor.DepthStream.Enable();
-            // Function to be called when the Kinect is ready to work
-            _sensor.AllFramesReady += _sensor_AllFramesReady;
-            // Enable Skeletal tracking
-            _sensor.SkeletonStream.Enable();
-            _sensor.SkeletonStream.TrackingMode = SkeletonTrackingMode.Default;
-            // True if using near mode
-            _sensor.SkeletonStream.EnableTrackingInNearRange = false;
-
-            return true;
-        }
-
-        /*****************************************************************
-        * Function: StopKinect
-        * Description: Halts the Kinect from recieving input.
-        * Parameters: None
-       ******************************************************************/
-        private void StopKinect()
-        {
-            // Only Stop the Kinect if we're using one
-            if (_sensor != null && _sensor.IsRunning)
-            {
-                _sensor.Stop();
-            }
+            _kinect = new Kinect();
         }
 
         /*****************************************************************
@@ -106,10 +57,12 @@ namespace TheLivingRoom
         {
             if (btnStart.Content.ToString() == "Start")
             {
-                if (InitKinect())
+                if (_kinect.InitKinect())
                 {
                     btnStart.Content = "Stop";
                     textBlockError.Text = "";
+                    // Function to be called when the Kinect is ready to work
+                    _kinect.AllFramesReady += _sensor_AllFramesReady;
                 }
                 else
                 {
@@ -118,15 +71,16 @@ namespace TheLivingRoom
             }
             else
             {
-                StopKinect();
+                _kinect.StopKinect();
                 btnStart.Content = "Start";
             }
         }
 
+        // Function to run when the Kinect is reading data
         void _sensor_AllFramesReady(object sender, AllFramesReadyEventArgs e)
         {
             // Set to size of total length of pixel data buffer for each ImageFrame in ImageStream
-            _depthImagePixels = new DepthImagePixel[_sensor.DepthStream.FramePixelDataLength];
+            _depthImagePixels = new DepthImagePixel[_kinect.FramePixelDataLength];
 
             // Get depth data for the frame
             using (var frame = e.OpenDepthImageFrame())
@@ -167,7 +121,7 @@ namespace TheLivingRoom
                 //var headPosition1 = skeleton1.Joints[JointType.Head].Position;
                 var rightHandPosition1 = skeleton1.Joints[JointType.HandRight].Position;
                 var leftHandPosition1 = skeleton1.Joints[JointType.HandLeft].Position;
-                var mapper = new CoordinateMapper(_sensor);
+                var mapper = new CoordinateMapper(_kinect.Sensor);
 
                 //var colorPointHead1 = mapper.MapSkeletonPointToColorPoint(headPosition1,
                 //ColorImageFormat.RgbResolution640x480Fps30);
@@ -183,7 +137,7 @@ namespace TheLivingRoom
                 var depthPointHand2 = mapper.MapSkeletonPointToDepthPoint(leftHandPosition1,
                     DepthImageFormat.Resolution640x480Fps30);
 
-                textBlockDistInches.Text = Math.Round((GetDistance(depthPointHand1, depthPointHand2) / 12), 4).ToString();
+                textBlockDistInches.Text = Math.Round((DistanceTracker.GetDistance(depthPointHand1, depthPointHand2) / 12), 4).ToString();
 
                 //canvasFeed.Children.Remove(lastHead);
                 canvasFeed.Children.Remove(_lastHand);
@@ -236,98 +190,5 @@ namespace TheLivingRoom
             return circle;
         }
 
-        /*****************************************************************
-         * Function: GetDistance
-         * Description: Determines the distance between 2 DepthImageFrame
-         * points in inches by manipulating pixel coordinates and depth 
-         * data. 
-         * Parameters: 
-         *      DepthImagePoint a, b: DepthImageFrames recieved from the 
-         *                            Kinect. The internal data should 
-         *                            not be manipulated in any way.
-        *****************************************************************/
-        private static double GetDistance(DepthImagePoint a, DepthImagePoint b)
-        {
-            // Used for frame of reference to determine actual distance
-            int closerDepth = Math.Min(a.Depth, b.Depth);
-            // Pixels on the 640x480 sensor per foot horizontally
-            double pxPerInchHor = DepthToPxPerInchHor(closerDepth);
-            // Pixels on the 640x480 sensor per foot vertically
-            double pxPerInchVert = DepthToPxPerInchVert(closerDepth);
-
-            // Horizontal distance between points in inches
-            double dxInches = Math.Abs(a.X - b.X) / pxPerInchHor;
-            // Vertical distance between points in inches
-            double dyInches = Math.Abs(a.Y - b.Y) / pxPerInchVert;
-            // Depth difference between points in inches
-            double dzInches = Math.Abs(DepthToInches(a.Depth) - DepthToInches(b.Depth));
-
-            // Pythagoream theorem to get the approximate distance in inches
-            return Math.Sqrt(Math.Pow(dxInches, 2) + Math.Pow(dyInches, 2) + Math.Pow(dzInches, 2));
-        }
-
-        /*****************************************************************
-         * Function: DepthToPxPerInchHor
-         * Description: Takes a depth and determines how many pixels of
-         * the 640 pixel width limit it takes to represent an inch.
-         * Parameters: 
-         *      int depth: depth in units as returned by .Depth on a 
-         *                 DepthImageFrame object
-        *****************************************************************/
-        private static double DepthToPxPerInchHor(int depth)
-        {
-            // These constants were calculated by graphing the number of horizontal 
-            // pixels used to represent 1ft at various ranges from 840KU to 2800KU 
-            // which matched the curve y = 120372x^-0.926 with and R^2 value of 
-            // 0.99848. KU is used to represent the units that the Kinect returns 
-            // on depth data
-            const double c = 120372;
-            const double e = -0.926;
-
-            // return as inches for less decimals
-            return ((Math.Pow(depth, e)) * c) / 12;
-        }
-
-        /*****************************************************************
-         * Function: DepthToPxPerInchVert
-         * Description: Takes a depth and determines how many pixels of
-         * the 480 pixel height limit it takes to represent an inch.
-         * Parameters: 
-         *      int depth: depth in units as returned by .Depth on a 
-         *                 DepthImageFrame object
-        *****************************************************************/
-        private static double DepthToPxPerInchVert(int depth)
-        {
-            // These constants were calculated by graphing the number of vertical 
-            // pixels used to represent 1ft at various ranges from 840KU to 2800KU 
-            // which matched the curve y = 37935x^-0.777 with and R^2 value of 
-            // 0.98111. KU is used to represent the units that the Kinect returns 
-            // on depth data
-            const double c = 37935;
-            const double e = -0.777;
-
-            // return as inches for less decimals
-            return ((Math.Pow(depth, e)) * c) / 12;
-        }
-
-        /*****************************************************************
-         * Function: DepthToInches
-         * Description: Takes a depth and determines how many inches away
-         * the point is.
-         * Parameters: 
-         *      int depth: depth in units as returned by .Depth on a 
-         *                 DepthImageFrame object
-        *****************************************************************/
-        private static double DepthToInches(int depth)
-        {
-            // These constants were calculated by graphing the relationship between the 
-            // depth reported by the Kinect to actual depth in inches. Distances from the
-            // minimum recognized distance of about 3 feet to 11 feet. The relationship
-            // is linear at matches the line 0.0442x - 4.8759 with an R^2 value of 0.9992
-            const double m = 0.0442;
-            const double b = -4.8759;
-
-            return m * depth + b;
-        }
     }
 }
