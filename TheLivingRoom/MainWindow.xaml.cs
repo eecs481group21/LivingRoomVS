@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,8 +22,7 @@ namespace TheLivingRoom
     /// </summary>
     public partial class MainWindow : Window
     {
-        private Kinect _kinect;
-        private DepthImagePixel[] _depthImagePixels;
+        private readonly Kinect _kinect;
         private Shape _lastHead = null;
         private Shape _lastHand;
         private Shape _lastLine;
@@ -42,7 +42,7 @@ namespace TheLivingRoom
          * Parameters: 
          *      ColorImageFrame frame: frame captured by the Kinect
         *****************************************************************/
-        private BitmapSource CreateBitmap(ColorImageFrame frame)
+        private static BitmapSource CreateBitmap(ColorImageFrame frame)
         {
             var pixelData = new byte[frame.PixelDataLength];
             frame.CopyPixelDataTo(pixelData);
@@ -76,21 +76,10 @@ namespace TheLivingRoom
             }
         }
 
-        // Function to run when the Kinect is reading data
+        // Function to run when the Kinect is reading data. We'll move this into 
+        // the Kinect class once we transition to the Music player
         void _sensor_AllFramesReady(object sender, AllFramesReadyEventArgs e)
         {
-            // Set to size of total length of pixel data buffer for each ImageFrame in ImageStream
-            _depthImagePixels = new DepthImagePixel[_kinect.FramePixelDataLength];
-
-            // Get depth data for the frame
-            using (var frame = e.OpenDepthImageFrame())
-            {
-                if (frame == null)
-                {
-                    return;
-                }
-                frame.CopyDepthImagePixelDataTo(_depthImagePixels);
-            }
 
             // Get color info from the frame
             using (var frame = e.OpenColorImageFrame())
@@ -137,7 +126,9 @@ namespace TheLivingRoom
                 var depthPointHand2 = mapper.MapSkeletonPointToDepthPoint(leftHandPosition1,
                     DepthImageFormat.Resolution640x480Fps30);
 
-                textBlockDistInches.Text = Math.Round((_kinect.GetDistance(depthPointHand1, depthPointHand2) / 12), 4).ToString();
+                double deltaDist = _kinect.GetDistance(depthPointHand1, depthPointHand2) / 12.0;
+                _kinect.LogDist(deltaDist);
+                textBlockDistInches.Text = Math.Round(deltaDist, 4).ToString(CultureInfo.InvariantCulture);
 
                 //canvasFeed.Children.Remove(lastHead);
                 canvasFeed.Children.Remove(_lastHand);

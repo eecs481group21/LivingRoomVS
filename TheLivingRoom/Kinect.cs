@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,10 +8,13 @@ using Microsoft.Kinect;
 
 namespace TheLivingRoom
 {
-    class Kinect
+    public class Kinect
     {
 
         private KinectSensor _sensor;
+        private MotionTracker _motionTracker;
+
+        private const double TouchTolerance = 0.4;
 
 
         public int FramePixelDataLength
@@ -62,6 +66,8 @@ namespace TheLivingRoom
             // True if using near mode
             _sensor.SkeletonStream.EnableTrackingInNearRange = false;
 
+            _motionTracker = new MotionTracker();
+
             return true;
         }
 
@@ -81,7 +87,7 @@ namespace TheLivingRoom
 
         /*****************************************************************
         * Function: GetDistance
-        * Description: Use the DistanceTracker class to process the 
+        * Description: Use the MotionTracker class to process the 
         *              distance between points
         * Parameters: 
         *      DepthImagePoint a, b: DepthImageFrames recieved from the 
@@ -90,23 +96,45 @@ namespace TheLivingRoom
         ******************************************************************/
         public double GetDistance(DepthImagePoint a, DepthImagePoint b)
         {
-            return DistanceTracker.GetDistance(a, b);
+            return _motionTracker.GetDistance(a, b);
+        }
+
+        /*****************************************************************
+         * Function: LogDist
+         * Description: Use the Motion Tracker class to log the data
+         * Parameters: 
+         *      double deltaDist: Distance between two points
+        *****************************************************************/
+        public void LogDist(double deltaDist)
+        {
+            _motionTracker.LogDist(deltaDist);
         }
 
 
-        private class DistanceTracker
+        internal class MotionTracker
         {
+            private readonly double[] _pastDistances;
+            private int _curDeltaFrame;
+            private const int Fps = 30;
+            private const int CaptureWindow = 3;
+
+            public MotionTracker()
+            {
+                _pastDistances = new double[Fps * CaptureWindow];
+                _curDeltaFrame = 0;
+            }
+
             /*****************************************************************
              * Function: GetDistance
              * Description: Determines the distance between 2 DepthImageFrame
-             * points in inches by manipulating pixel coordinates and depth 
+             *              points in inches by manipulating pixel coordinates and depth 
              * data. 
              * Parameters: 
              *      DepthImagePoint a, b: DepthImageFrames recieved from the 
              *                            Kinect. The internal data should 
              *                            not be manipulated in any way.
             *****************************************************************/
-            public static double GetDistance(DepthImagePoint a, DepthImagePoint b)
+            public double GetDistance(DepthImagePoint a, DepthImagePoint b)
             {
                 // Used for frame of reference to determine actual distance
                 int closerDepth = Math.Min(a.Depth, b.Depth);
@@ -129,7 +157,7 @@ namespace TheLivingRoom
             /*****************************************************************
              * Function: DepthToPxPerInchHor
              * Description: Takes a depth and determines how many pixels of
-             * the 640 pixel width limit it takes to represent an inch.
+             *              the 640 pixel width limit it takes to represent an inch.
              * Parameters: 
              *      int depth: depth in units as returned by .Depth on a 
              *                 DepthImageFrame object
@@ -151,7 +179,7 @@ namespace TheLivingRoom
             /*****************************************************************
              * Function: DepthToPxPerInchVert
              * Description: Takes a depth and determines how many pixels of
-             * the 480 pixel height limit it takes to represent an inch.
+             *              the 480 pixel height limit it takes to represent an inch.
              * Parameters: 
              *      int depth: depth in units as returned by .Depth on a 
              *                 DepthImageFrame object
@@ -173,7 +201,7 @@ namespace TheLivingRoom
             /*****************************************************************
              * Function: DepthToInches
              * Description: Takes a depth and determines how many inches away
-             * the point is.
+             *              the point is.
              * Parameters: 
              *      int depth: depth in units as returned by .Depth on a 
              *                 DepthImageFrame object
@@ -189,11 +217,27 @@ namespace TheLivingRoom
 
                 return m * depth + b;
             }
-        }
 
-        // It tracks distances, but also listens for particular gestures
-        private class GestureTracker : DistanceTracker
-        {
+            /*****************************************************************
+             * Function: LogDist
+             * Description: Log a value of the current deltaDistance in the 
+             *              list of the previous Fps*CaptureWindow distances
+             * Parameters: 
+             *      double deltaDist: Distance between two points
+            *****************************************************************/
+            public void LogDist(double deltaDist)
+            {
+                _pastDistances[_curDeltaFrame] = deltaDist;
+                // Move to next slot in the List
+                _curDeltaFrame = (_curDeltaFrame + 1) % (Fps*CaptureWindow);
+
+                // Debug.Assert(_pastDistances.Capacity <= (Fps * CaptureWindow));
+                if (_pastDistances.Length > (Fps*CaptureWindow))
+                {
+                    Console.Error.WriteLine("MotionTracker::LogDist - _pastDistances Count: " + _pastDistances.Length);
+                }
+            }
+
             /*bool IsMakingEyeContact(IFTModel face1, IFTModel , face2 )
             {
             
@@ -209,10 +253,9 @@ namespace TheLivingRoom
              *                            Kinect. The internal data should 
              *                            not be manipulated in any way.
             *****************************************************************/
-            bool IsMakingHandContact(DepthImagePoint a, DepthImagePoint b)
+            private bool IsMakingHandContact(DepthImagePoint a, DepthImagePoint b)
             {
-                // Just a stub for now
-                return false;
+                return GetDistance(a, b) < TouchTolerance;
             }
 
             /*****************************************************************
@@ -222,15 +265,12 @@ namespace TheLivingRoom
              *              between users. -1 meaning moving farther apart, 
              *              and 1 being moving closer together.
              * Parameters: 
-             *      DepthImagePoint a, b: DepthImageFrames recieved from the 
-             *                            Kinect. The internal data should 
-             *                            not be manipulated in any way.
+             *      DepthImagePoint a, b: None
             *****************************************************************/
-            double GradeInterpersonalMovement(DepthImagePoint a, DepthImagePoint b)
+            private static double GradeInterpersonalMovement()
             {
                 return 0.0;
             }
-
         }
     }
 }
