@@ -53,6 +53,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="TestFixedLengthQueue.cs" />
     <Compile Include="TestKinect.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

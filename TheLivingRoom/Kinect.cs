@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Kinect;
+using Microsoft.Kinect.Toolkit;
 
 namespace TheLivingRoom
 {
@@ -110,18 +111,22 @@ namespace TheLivingRoom
             _motionTracker.LogDist(deltaDist);
         }
 
+        public double GetDistChangeRatio()
+        {
+            return _motionTracker.GradeInterpersonalMovement();
+        }
+
 
         internal class MotionTracker
         {
-            private readonly double[] _pastDistances;
-            private int _curDeltaFrame;
+            private readonly FixedLengthQueue<double> _pastDistances;
             private const int Fps = 30;
-            private const int CaptureWindow = 3;
+            private const double CaptureWindow = 0.5; // In seconds
+            private const double AvgHumanFps = 7;
 
             public MotionTracker()
             {
-                _pastDistances = new double[Fps * CaptureWindow];
-                _curDeltaFrame = 0;
+                _pastDistances = new FixedLengthQueue<double>((int)(Fps * CaptureWindow));
             }
 
             /*****************************************************************
@@ -227,14 +232,12 @@ namespace TheLivingRoom
             *****************************************************************/
             public void LogDist(double deltaDist)
             {
-                _pastDistances[_curDeltaFrame] = deltaDist;
-                // Move to next slot in the List
-                _curDeltaFrame = (_curDeltaFrame + 1) % (Fps*CaptureWindow);
+                _pastDistances.Enqueue(deltaDist);
 
                 // Debug.Assert(_pastDistances.Capacity <= (Fps * CaptureWindow));
-                if (_pastDistances.Length > (Fps*CaptureWindow))
+                if (_pastDistances.Count > (Fps*CaptureWindow))
                 {
-                    Console.Error.WriteLine("MotionTracker::LogDist - _pastDistances Count: " + _pastDistances.Length);
+                    Console.Error.WriteLine("MotionTracker::LogDist - _pastDistances Count: " + _pastDistances.Count);
                 }
             }
 
@@ -267,9 +270,26 @@ namespace TheLivingRoom
              * Parameters: 
              *      DepthImagePoint a, b: None
             *****************************************************************/
-            private static double GradeInterpersonalMovement()
+            public double GradeInterpersonalMovement()
             {
-                return 0.0;
+                // Queue is not full yet
+                if (_pastDistances.Count != _pastDistances.Size)
+                {
+                    return 0.0;
+                }
+
+                double distanceMoved = _pastDistances.Last() - _pastDistances.First();
+                
+                // Faster than expected fps
+                if (distanceMoved > AvgHumanFps)
+                {
+                    return 1.0;
+                }
+                if (distanceMoved < -1 * AvgHumanFps)
+                {
+                    return -1.0;
+                }
+                return distanceMoved / AvgHumanFps;
             }
         }
     }
