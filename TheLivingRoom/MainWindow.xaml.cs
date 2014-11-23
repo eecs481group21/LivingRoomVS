@@ -137,7 +137,7 @@ namespace TheLivingRoom
                 var depthPointHand2 = mapper.MapSkeletonPointToDepthPoint(leftHandPosition1,
                     DepthImageFormat.Resolution640x480Fps30);
 
-                textBlockDistInches.Text = Math.Round((DistanceTracker.GetDistance(depthPointHand1, depthPointHand2) / 12), 4).ToString();
+                textBlockDistInches.Text = Math.Round((_kinect.GetDistance(depthPointHand1, depthPointHand2) / 12), 4).ToString();
 
                 //canvasFeed.Children.Remove(lastHead);
                 canvasFeed.Children.Remove(_lastHand);
