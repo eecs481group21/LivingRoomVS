@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Machine>RUSSELL815B</Machine>
+    <WindowsUser>russell</WindowsUser>
+    <TargetPlatformIdentifier>Windows</TargetPlatformIdentifier>
+    <SolutionConfiguration>Debug|AnyCPU</SolutionConfiguration>
+    <PackageArchitecture>neutral</PackageArchitecture>
+    <PackageIdentityName>0eef9a73-08cc-405e-bf10-2f54b1fa50d3</PackageIdentityName>
+    <IntermediateOutputPath>C:\Users\russell\Documents\Visual Studio 2013\TheLivingRoom\TheLivingRoom\obj\Debug\</IntermediateOutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <AppXManifest Include="C:\Users\russell\Documents\Visual Studio 2013\TheLivingRoom\TheLivingRoom\bin\Debug\AppxManifest.xml">
+      <PackagePath>AppxManifest.xml</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+    </AppXManifest>
+  </ItemGroup>
+  <ItemGroup>
+    <AppxPackagedFile Include="C:\Users\russell\Documents\Visual Studio 2013\TheLivingRoom\TheLivingRoom\bin\Debug\TheLivingRoom.exe">
+      <PackagePath>TheLivingRoom.exe</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\russell\Documents\Visual Studio 2013\TheLivingRoom\TheLivingRoom\Assets\Logo.scale-100.png">
+      <PackagePath>Assets\Logo.scale-100.png</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\russell\Documents\Visual Studio 2013\TheLivingRoom\TheLivingRoom\Assets\SmallLogo.scale-100.png">
+      <PackagePath>Assets\SmallLogo.scale-100.png</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\russell\Documents\Visual Studio 2013\TheLivingRoom\TheLivingRoom\Assets\SplashScreen.scale-100.png">
+      <PackagePath>Assets\SplashScreen.scale-100.png</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\russell\Documents\Visual Studio 2013\TheLivingRoom\TheLivingRoom\Assets\StoreLogo.scale-100.png">
+      <PackagePath>Assets\StoreLogo.scale-100.png</PackagePath>
+      <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\russell\Documents\Visual Studio 2013\TheLivingRoom\TheLivingRoom\Assets\SoundPacks\Default\Audio\cello.mp3">
+      <PackagePath>Assets\SoundPacks\Default\Audio\cello.mp3</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\russell\Documents\Visual Studio 2013\TheLivingRoom\TheLivingRoom\Assets\SoundPacks\Default\Audio\drums.mp3">
+      <PackagePath>Assets\SoundPacks\Default\Audio\drums.mp3</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\russell\Documents\Visual Studio 2013\TheLivingRoom\TheLivingRoom\Assets\SoundPacks\Default\Audio\flute.mp3">
+      <PackagePath>Assets\SoundPacks\Default\Audio\flute.mp3</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\russell\Documents\Visual Studio 2013\TheLivingRoom\TheLivingRoom\Assets\SoundPacks\Default\Audio\guitar.mp3">
+      <PackagePath>Assets\SoundPacks\Default\Audio\guitar.mp3</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\russell\Documents\Visual Studio 2013\TheLivingRoom\TheLivingRoom\Assets\SoundPacks\Default\Audio\piano.mp3">
+      <PackagePath>Assets\SoundPacks\Default\Audio\piano.mp3</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\russell\Documents\Visual Studio 2013\TheLivingRoom\TheLivingRoom\Assets\SoundPacks\Default\Audio\sax.mp3">
+      <PackagePath>Assets\SoundPacks\Default\Audio\sax.mp3</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\russell\Documents\Visual Studio 2013\TheLivingRoom\TheLivingRoom\Assets\SoundPacks\Default\Audio\trumpet.mp3">
+      <PackagePath>Assets\SoundPacks\Default\Audio\trumpet.mp3</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\russell\Documents\Visual Studio 2013\TheLivingRoom\TheLivingRoom\Assets\SoundPacks\Default\Audio\violin.mp3">
+      <PackagePath>Assets\SoundPacks\Default\Audio\violin.mp3</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\russell\Documents\Visual Studio 2013\TheLivingRoom\TheLivingRoom\Assets\SoundPacks\Default\Audio\xylophone.mp3">
+      <PackagePath>Assets\SoundPacks\Default\Audio\xylophone.mp3</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\russell\Documents\Visual Studio 2013\TheLivingRoom\TheLivingRoom\bin\Debug\App.xbf">
+      <PackagePath>App.xbf</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\russell\Documents\Visual Studio 2013\TheLivingRoom\TheLivingRoom\bin\Debug\MainPage.xbf">
+      <PackagePath>MainPage.xbf</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\russell\Documents\Visual Studio 2013\TheLivingRoom\TheLivingRoom\bin\Debug\SettingsPage.xbf">
+      <PackagePath>SettingsPage.xbf</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\russell\Documents\Visual Studio 2013\TheLivingRoom\TheLivingRoom\bin\Debug\TheLivingRoom.xr.xml">
+      <PackagePath>TheLivingRoom.xr.xml</PackagePath>
+    </AppxPackagedFile>
+    <AppxPackagedFile Include="C:\Users\russell\Documents\Visual Studio 2013\TheLivingRoom\TheLivingRoom\bin\Debug\resources.pri">
+      <PackagePath>resources.pri</PackagePath>
+    </AppxPackagedFile>
+  </ItemGroup>
+  <ItemGroup>
+  </ItemGroup>
+</Project>

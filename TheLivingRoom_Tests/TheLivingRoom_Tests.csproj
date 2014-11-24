@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2AEB946B-2E3A-42E8-AFC1-26C32EEC0A12}</ProjectGuid>
+    <ProjectGuid>{2A656E9C-B106-4F16-B045-DC296E89B3A8}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>TheLivingRoom_Tests</RootNamespace>
@@ -46,11 +46,7 @@
         <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
       </ItemGroup>
     </When>
-    <Otherwise>
-      <ItemGroup>
-        <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework" />
-      </ItemGroup>
-    </Otherwise>
+    <Otherwise />
   </Choose>
   <ItemGroup>
     <Compile Include="TestFixedLengthQueue.cs" />
@@ -58,13 +54,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TheLivingRoom\TheLivingRoom.csproj">
-      <Project>{3bc864c0-5e9c-4049-a139-09ae05c7e136}</Project>
-      <Name>TheLivingRoom</Name>
-    </ProjectReference>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <ProjectReference Include="..\TheLivingRoom_Kinect\TheLivingRoom_Kinect.csproj">
+      <Project>{95dddb08-34dd-40e6-9865-58ef88b0f521}</Project>
+      <Name>TheLivingRoom_Kinect</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

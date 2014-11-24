@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using TheLivingRoom;
+using TheLivingRoom_Kinect;
 
 namespace TheLivingRoom_Tests
 {
@@ -15,7 +15,7 @@ namespace TheLivingRoom_Tests
         public void Init()
         {
             _kinect = new Kinect();
-            _kinect.InitKinect(); 
+            _kinect.InitKinect();
         }
 
         [TearDown]
@@ -40,7 +40,7 @@ namespace TheLivingRoom_Tests
             }
 
             _kinect.LogDist(4.5);
-            Assert.AreEqual(3.5/7.0, _kinect.GetDistChangeRatio());
+            Assert.AreEqual(3.5 / 7.0, _kinect.GetDistChangeRatio());
 
             _kinect.LogDist(4.5);
             Assert.AreEqual(2.5 / 7.0, _kinect.GetDistChangeRatio());

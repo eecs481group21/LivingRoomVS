@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using TheLivingRoom;
+using TheLivingRoom_Kinect;
 
 namespace TheLivingRoom_Tests
 {
