@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <Machine>KYLE-PC</Machine>
-    <WindowsUser>Kyle</WindowsUser>
+    <Machine>RUSSELL815B</Machine>
+    <WindowsUser>russell</WindowsUser>
     <TargetPlatformIdentifier>Windows</TargetPlatformIdentifier>
     <SolutionConfiguration>Debug|AnyCPU</SolutionConfiguration>
     <PackageArchitecture>neutral</PackageArchitecture>
     <PackageIdentityName>0eef9a73-08cc-405e-bf10-2f54b1fa50d3</PackageIdentityName>
-    <IntermediateOutputPath>c:\users\kyle\documents\visual studio 2013\Projects\TheLivingRoom\TheLivingRoom\obj\Debug\</IntermediateOutputPath>
-    <RegisteredManifestChecksum>9EF455B57A7751F5C68B4A102DDAA1CAFE90CBFE462E9F9F85B7D33B7C5BDAC2</RegisteredManifestChecksum>
+    <IntermediateOutputPath>C:\Users\russell\Documents\Visual Studio 2013\TheLivingRoom\TheLivingRoom\obj\Debug\</IntermediateOutputPath>
+    <RegisteredManifestChecksum>73CFB87CDC6B2080F5E8A3A5C65E8D01E11DDACCDFF7B83E53107B7BAB840565</RegisteredManifestChecksum>
     <RegisteredPackageMoniker>0eef9a73-08cc-405e-bf10-2f54b1fa50d3_1.0.0.0_neutral__1n6gkc32tkj7t</RegisteredPackageMoniker>
     <RegisteredUserModeAppID>0eef9a73-08cc-405e-bf10-2f54b1fa50d3_1n6gkc32tkj7t!App</RegisteredUserModeAppID>
     <RegisteredPackageID>0eef9a73-08cc-405e-bf10-2f54b1fa50d3</RegisteredPackageID>
@@ -17,92 +17,92 @@
     <JitOptimizationSuppressed>True</JitOptimizationSuppressed>
   </PropertyGroup>
   <ItemGroup>
-    <AppXManifest Include="c:\users\kyle\documents\visual studio 2013\Projects\TheLivingRoom\TheLivingRoom\bin\Debug\AppxManifest.xml">
+    <AppXManifest Include="C:\Users\russell\Documents\Visual Studio 2013\TheLivingRoom\TheLivingRoom\bin\Debug\AppxManifest.xml">
       <PackagePath>AppxManifest.xml</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
-      <Modified>2014-11-24T16:31:21.526</Modified>
+      <Modified>2014-11-24T19:07:44.604</Modified>
     </AppXManifest>
   </ItemGroup>
   <ItemGroup>
-    <AppxPackagedFile Include="c:\users\kyle\documents\visual studio 2013\Projects\TheLivingRoom\TheLivingRoom\bin\Debug\TheLivingRoom.exe">
+    <AppxPackagedFile Include="C:\Users\russell\Documents\Visual Studio 2013\TheLivingRoom\TheLivingRoom\bin\Debug\TheLivingRoom.exe">
       <PackagePath>TheLivingRoom.exe</PackagePath>
-      <Modified>2014-11-24T16:37:57.660</Modified>
+      <Modified>2014-11-24T19:07:44.309</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="c:\users\kyle\documents\visual studio 2013\Projects\TheLivingRoom\TheLivingRoom\Assets\Logo.scale-100.png">
+    <AppxPackagedFile Include="C:\Users\russell\Documents\Visual Studio 2013\TheLivingRoom\TheLivingRoom\Assets\Logo.scale-100.png">
       <PackagePath>Assets\Logo.scale-100.png</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
-      <Modified>2013-07-23T10:01:02.000</Modified>
+      <Modified>2014-11-24T18:42:54.993</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="c:\users\kyle\documents\visual studio 2013\Projects\TheLivingRoom\TheLivingRoom\Assets\SmallLogo.scale-100.png">
+    <AppxPackagedFile Include="C:\Users\russell\Documents\Visual Studio 2013\TheLivingRoom\TheLivingRoom\Assets\SmallLogo.scale-100.png">
       <PackagePath>Assets\SmallLogo.scale-100.png</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
-      <Modified>2013-07-23T10:01:02.000</Modified>
+      <Modified>2014-11-24T18:42:55.087</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="c:\users\kyle\documents\visual studio 2013\Projects\TheLivingRoom\TheLivingRoom\Assets\SplashScreen.scale-100.png">
+    <AppxPackagedFile Include="C:\Users\russell\Documents\Visual Studio 2013\TheLivingRoom\TheLivingRoom\Assets\SplashScreen.scale-100.png">
       <PackagePath>Assets\SplashScreen.scale-100.png</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
-      <Modified>2013-07-23T10:01:02.000</Modified>
+      <Modified>2014-11-24T18:42:55.118</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="c:\users\kyle\documents\visual studio 2013\Projects\TheLivingRoom\TheLivingRoom\Assets\StoreLogo.scale-100.png">
+    <AppxPackagedFile Include="C:\Users\russell\Documents\Visual Studio 2013\TheLivingRoom\TheLivingRoom\Assets\StoreLogo.scale-100.png">
       <PackagePath>Assets\StoreLogo.scale-100.png</PackagePath>
       <ReRegisterAppIfChanged>true</ReRegisterAppIfChanged>
-      <Modified>2013-07-23T10:01:02.000</Modified>
+      <Modified>2014-11-24T18:42:55.118</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="c:\users\kyle\documents\visual studio 2013\Projects\TheLivingRoom\TheLivingRoom\Assets\SoundPacks\Default\Audio\cello.mp3">
+    <AppxPackagedFile Include="C:\Users\russell\Documents\Visual Studio 2013\TheLivingRoom\TheLivingRoom\Assets\SoundPacks\Default\Audio\cello.mp3">
       <PackagePath>Assets\SoundPacks\Default\Audio\cello.mp3</PackagePath>
-      <Modified>2014-11-24T15:46:50.884</Modified>
+      <Modified>2014-11-24T18:42:55.087</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="c:\users\kyle\documents\visual studio 2013\Projects\TheLivingRoom\TheLivingRoom\Assets\SoundPacks\Default\Audio\drums.mp3">
+    <AppxPackagedFile Include="C:\Users\russell\Documents\Visual Studio 2013\TheLivingRoom\TheLivingRoom\Assets\SoundPacks\Default\Audio\drums.mp3">
       <PackagePath>Assets\SoundPacks\Default\Audio\drums.mp3</PackagePath>
-      <Modified>2014-11-24T15:46:50.887</Modified>
+      <Modified>2014-11-24T18:42:55.087</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="c:\users\kyle\documents\visual studio 2013\Projects\TheLivingRoom\TheLivingRoom\Assets\SoundPacks\Default\Audio\flute.mp3">
+    <AppxPackagedFile Include="C:\Users\russell\Documents\Visual Studio 2013\TheLivingRoom\TheLivingRoom\Assets\SoundPacks\Default\Audio\flute.mp3">
       <PackagePath>Assets\SoundPacks\Default\Audio\flute.mp3</PackagePath>
-      <Modified>2014-11-24T15:46:50.890</Modified>
+      <Modified>2014-11-24T18:42:55.087</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="c:\users\kyle\documents\visual studio 2013\Projects\TheLivingRoom\TheLivingRoom\Assets\SoundPacks\Default\Audio\guitar.mp3">
+    <AppxPackagedFile Include="C:\Users\russell\Documents\Visual Studio 2013\TheLivingRoom\TheLivingRoom\Assets\SoundPacks\Default\Audio\guitar.mp3">
       <PackagePath>Assets\SoundPacks\Default\Audio\guitar.mp3</PackagePath>
-      <Modified>2014-11-24T15:46:50.892</Modified>
+      <Modified>2014-11-24T18:42:55.103</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="c:\users\kyle\documents\visual studio 2013\Projects\TheLivingRoom\TheLivingRoom\Assets\SoundPacks\Default\Audio\piano.mp3">
+    <AppxPackagedFile Include="C:\Users\russell\Documents\Visual Studio 2013\TheLivingRoom\TheLivingRoom\Assets\SoundPacks\Default\Audio\piano.mp3">
       <PackagePath>Assets\SoundPacks\Default\Audio\piano.mp3</PackagePath>
-      <Modified>2014-11-24T16:31:13.961</Modified>
+      <Modified>2014-11-24T18:42:55.103</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="c:\users\kyle\documents\visual studio 2013\Projects\TheLivingRoom\TheLivingRoom\Assets\SoundPacks\Default\Audio\sax.mp3">
+    <AppxPackagedFile Include="C:\Users\russell\Documents\Visual Studio 2013\TheLivingRoom\TheLivingRoom\Assets\SoundPacks\Default\Audio\sax.mp3">
       <PackagePath>Assets\SoundPacks\Default\Audio\sax.mp3</PackagePath>
-      <Modified>2014-11-24T06:54:06.935</Modified>
+      <Modified>2014-11-24T18:42:55.103</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="c:\users\kyle\documents\visual studio 2013\Projects\TheLivingRoom\TheLivingRoom\Assets\SoundPacks\Default\Audio\trumpet.mp3">
+    <AppxPackagedFile Include="C:\Users\russell\Documents\Visual Studio 2013\TheLivingRoom\TheLivingRoom\Assets\SoundPacks\Default\Audio\trumpet.mp3">
       <PackagePath>Assets\SoundPacks\Default\Audio\trumpet.mp3</PackagePath>
-      <Modified>2014-11-24T15:46:50.897</Modified>
+      <Modified>2014-11-24T18:42:55.103</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="c:\users\kyle\documents\visual studio 2013\Projects\TheLivingRoom\TheLivingRoom\Assets\SoundPacks\Default\Audio\violin.mp3">
+    <AppxPackagedFile Include="C:\Users\russell\Documents\Visual Studio 2013\TheLivingRoom\TheLivingRoom\Assets\SoundPacks\Default\Audio\violin.mp3">
       <PackagePath>Assets\SoundPacks\Default\Audio\violin.mp3</PackagePath>
-      <Modified>2014-11-24T15:46:50.900</Modified>
+      <Modified>2014-11-24T18:42:55.103</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="c:\users\kyle\documents\visual studio 2013\Projects\TheLivingRoom\TheLivingRoom\Assets\SoundPacks\Default\Audio\xylophone.mp3">
+    <AppxPackagedFile Include="C:\Users\russell\Documents\Visual Studio 2013\TheLivingRoom\TheLivingRoom\Assets\SoundPacks\Default\Audio\xylophone.mp3">
       <PackagePath>Assets\SoundPacks\Default\Audio\xylophone.mp3</PackagePath>
-      <Modified>2014-11-24T15:46:50.903</Modified>
+      <Modified>2014-11-24T18:42:55.118</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="c:\users\kyle\documents\visual studio 2013\Projects\TheLivingRoom\TheLivingRoom\bin\Debug\App.xbf">
+    <AppxPackagedFile Include="C:\Users\russell\Documents\Visual Studio 2013\TheLivingRoom\TheLivingRoom\bin\Debug\App.xbf">
       <PackagePath>App.xbf</PackagePath>
-      <Modified>2014-11-24T16:31:21.278</Modified>
+      <Modified>2014-11-24T19:07:44.054</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="c:\users\kyle\documents\visual studio 2013\Projects\TheLivingRoom\TheLivingRoom\bin\Debug\MainPage.xbf">
+    <AppxPackagedFile Include="C:\Users\russell\Documents\Visual Studio 2013\TheLivingRoom\TheLivingRoom\bin\Debug\MainPage.xbf">
       <PackagePath>MainPage.xbf</PackagePath>
-      <Modified>2014-11-24T16:31:21.278</Modified>
+      <Modified>2014-11-24T19:07:44.055</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="c:\users\kyle\documents\visual studio 2013\Projects\TheLivingRoom\TheLivingRoom\bin\Debug\SettingsPage.xbf">
+    <AppxPackagedFile Include="C:\Users\russell\Documents\Visual Studio 2013\TheLivingRoom\TheLivingRoom\bin\Debug\SettingsPage.xbf">
       <PackagePath>SettingsPage.xbf</PackagePath>
-      <Modified>2014-11-24T16:31:21.278</Modified>
+      <Modified>2014-11-24T19:07:44.056</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="c:\users\kyle\documents\visual studio 2013\Projects\TheLivingRoom\TheLivingRoom\bin\Debug\TheLivingRoom.xr.xml">
+    <AppxPackagedFile Include="C:\Users\russell\Documents\Visual Studio 2013\TheLivingRoom\TheLivingRoom\bin\Debug\TheLivingRoom.xr.xml">
       <PackagePath>TheLivingRoom.xr.xml</PackagePath>
-      <Modified>2014-11-24T16:24:47.386</Modified>
+      <Modified>2014-11-24T18:42:55.368</Modified>
     </AppxPackagedFile>
-    <AppxPackagedFile Include="c:\users\kyle\documents\visual studio 2013\Projects\TheLivingRoom\TheLivingRoom\bin\Debug\resources.pri">
+    <AppxPackagedFile Include="C:\Users\russell\Documents\Visual Studio 2013\TheLivingRoom\TheLivingRoom\bin\Debug\resources.pri">
       <PackagePath>resources.pri</PackagePath>
-      <Modified>2014-11-24T16:31:21.488</Modified>
+      <Modified>2014-11-24T19:07:44.461</Modified>
     </AppxPackagedFile>
   </ItemGroup>
   <ItemGroup>
