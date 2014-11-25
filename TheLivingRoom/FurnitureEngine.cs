@@ -152,11 +152,11 @@ namespace TheLivingRoom
         }
 
         // Members
-        private readonly List<Furniture> _furniture;
+        private List<Furniture> _furniture;
 
-        private readonly Dictionary<Windows.System.VirtualKey, TriggerPoint> _triggers;
+        private Dictionary<Windows.System.VirtualKey, TriggerPoint> _triggers;
 
-        private readonly List<SoundPack> _soundPacks;
+        private List<SoundPack> _soundPacks;
 
         private int _currentSoundPackIndex;
     }

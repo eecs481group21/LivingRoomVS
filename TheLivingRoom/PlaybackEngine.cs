@@ -116,7 +116,8 @@ namespace TheLivingRoom
         }
 
         // Members
-        private List<PlaybackParameter> _parameters { get; set; }
+
+        private List<PlaybackParameter> _parameters;
 
         private double _systemVolumeLimit; // upper limit of playback volume
     }
