@@ -15,14 +15,12 @@ namespace TheLivingRoom
             {
                 return _instance;
             }
-            else
-            {
-                _instance = new FurnitureEngine();
-                return _instance;
-            }
+            
+            _instance = new FurnitureEngine();
+            return _instance;
         }
 
-        private static FurnitureEngine _instance { get; set; }
+        private static FurnitureEngine _instance;
 
         // Private constructor
         private FurnitureEngine()
@@ -145,11 +143,11 @@ namespace TheLivingRoom
         }
 
         // Members
-        private List<Furniture> _furniture;
+        private readonly List<Furniture> _furniture;
 
-        private Dictionary<Windows.System.VirtualKey, TriggerPoint> _triggers;
+        private readonly Dictionary<Windows.System.VirtualKey, TriggerPoint> _triggers;
 
-        private List<SoundPack> _soundPacks;
+        private readonly List<SoundPack> _soundPacks;
 
         private int _currentSoundPackIndex;
     }

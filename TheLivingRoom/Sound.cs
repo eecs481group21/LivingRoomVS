@@ -44,8 +44,7 @@ namespace TheLivingRoom
                 // 1. Reset the MediaElement (no alternative to clear source)
                 // 2. Adjust the volume
                 // 3. Set the source.
-                _sample = new Windows.UI.Xaml.Controls.MediaElement();
-                _sample.Volume = newVol;
+                _sample = new Windows.UI.Xaml.Controls.MediaElement {Volume = newVol};
                 _sample.SetSource(_stream, _mimeType);
             }
         }
@@ -60,10 +59,10 @@ namespace TheLivingRoom
         // Members
         public string Name { get; private set; }
 
-        private Windows.UI.Xaml.Controls.MediaElement _sample { get; set; }
+        private Windows.UI.Xaml.Controls.MediaElement _sample;
 
         // Private stream-related members
-        private Windows.Storage.Streams.IRandomAccessStream _stream { get; set; }
-        private string _mimeType { get; set; }
+        private Windows.Storage.Streams.IRandomAccessStream _stream;
+        private string _mimeType;
     }
 }

@@ -6,20 +6,20 @@ using System.Threading.Tasks;
 
 namespace TheLivingRoom
 {
-    class Point : System.Object
+    class Point : Object
     {
         public Point(double x, double y)
         {
-            this.x = x;
-            this.y = y;
+            this.X = x;
+            this.Y = y;
         }
 
-        public double x { get; set; }
-        public double y { get; set; }
+        public double X { get; set; }
+        public double Y { get; set; }
 
-        private static double epsilon = .0001;
+        private const double Epsilon = .0001;
 
-        public override bool Equals(System.Object obj)
+        public override bool Equals(Object obj)
         {
             if (obj == null)
             {
@@ -28,13 +28,13 @@ namespace TheLivingRoom
 
             // Attempt cast to type Point
             Point p = obj as Point;
-            if ((System.Object)p == null)
+            if ((Object)p == null)
             {
                 return false;
             }
 
             // Return true if the fields match:
-            return (doublesEqual(x, p.x)) && (doublesEqual(y, p.y));
+            return (DoublesEqual(X, p.X)) && (DoublesEqual(Y, p.Y));
         }
 
         public bool Equals(Point p)
@@ -46,22 +46,22 @@ namespace TheLivingRoom
             }
 
             // Return true if the fields match:
-            return (doublesEqual(x, p.x)) && (doublesEqual(y, p.y));
+            return (DoublesEqual(X, p.X)) && (DoublesEqual(Y, p.Y));
         }
 
         public override int GetHashCode()
         {
             // Simple hash
             int hash = 17;
-            hash *= 23 + x.GetHashCode();
-            hash *= 23 + y.GetHashCode();
+            hash *= 23 + X.GetHashCode();
+            hash *= 23 + Y.GetHashCode();
             return hash;
         }
 
         public static bool operator ==(Point a, Point b)
         {
             // If both are null, or both are same instance, return true.
-            if (System.Object.ReferenceEquals(a, b))
+            if (ReferenceEquals(a, b))
             {
                 return true;
             }
@@ -72,7 +72,7 @@ namespace TheLivingRoom
                 return false;
             }
 
-            return doublesEqual(a.x, b.x) && doublesEqual(a.y, b.y);
+            return DoublesEqual(a.X, b.X) && DoublesEqual(a.Y, b.Y);
         }
 
         public static bool operator !=(Point a, Point b)
@@ -80,8 +80,8 @@ namespace TheLivingRoom
             return !(a == b);
         }
 
-        private static bool doublesEqual(double a, double b) {
-            return (Math.Abs(a - b) < epsilon);
+        private static bool DoublesEqual(double a, double b) {
+            return (Math.Abs(a - b) < Epsilon);
         }
     }
 }

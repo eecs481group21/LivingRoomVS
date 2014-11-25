@@ -212,9 +212,11 @@ namespace TheLivingRoom
             // Render each piece of furniture as a Grid with 4 columns
             for (int i = 0; i < numFurnitureGrids; ++i)
             {
-                Grid curFurnitureGrid = new Grid();
-                curFurnitureGrid.HorizontalAlignment = HorizontalAlignment.Stretch;
-                curFurnitureGrid.VerticalAlignment = VerticalAlignment.Stretch;
+                Grid curFurnitureGrid = new Grid
+                {
+                    HorizontalAlignment = HorizontalAlignment.Stretch,
+                    VerticalAlignment = VerticalAlignment.Stretch
+                };
                 ColumnDefinition c1 = new ColumnDefinition();
                 ColumnDefinition c2 = new ColumnDefinition();
                 ColumnDefinition c3 = new ColumnDefinition();
@@ -269,7 +271,7 @@ namespace TheLivingRoom
             }
         }
 
-        private Grid CreateEmptyTile()
+        private static Grid CreateEmptyTile()
         {
             Grid tileGrid = new Grid();
             RowDefinition r1 = new RowDefinition(); // Image Row
@@ -287,25 +289,31 @@ namespace TheLivingRoom
             tileGrid.IsTapEnabled = true;
 
             // Add image to 0th row of tile
-            Image image = new Image(); // No source initially
-            image.Stretch = Stretch.None;
-            image.HorizontalAlignment = HorizontalAlignment.Stretch;
-            image.VerticalAlignment = VerticalAlignment.Center;
+            Image image = new Image
+            {
+                Stretch = Stretch.None,
+                HorizontalAlignment = HorizontalAlignment.Stretch,
+                VerticalAlignment = VerticalAlignment.Center
+            }; // No source initially
             image.SetValue(Grid.RowProperty, 0);
             tileGrid.Children.Add(image);
 
             // Put label in a StackPanel (to change background color)
-            Grid labelGrid = new Grid();
-            labelGrid.VerticalAlignment = VerticalAlignment.Stretch;
-            labelGrid.HorizontalAlignment = HorizontalAlignment.Stretch;
-            labelGrid.Background = new SolidColorBrush { Color = Color.FromArgb(255, 64, 64, 64) };
+            Grid labelGrid = new Grid
+            {
+                VerticalAlignment = VerticalAlignment.Stretch,
+                HorizontalAlignment = HorizontalAlignment.Stretch,
+                Background = new SolidColorBrush {Color = Color.FromArgb(255, 64, 64, 64)}
+            };
 
             // Create TextBlock and add to labelPanel
-            TextBlock label = new TextBlock();
-            label.VerticalAlignment = VerticalAlignment.Center;
-            label.HorizontalAlignment = HorizontalAlignment.Center;
-            label.Foreground = new SolidColorBrush { Color = Color.FromArgb(255, 255, 255, 255) };
-            label.FontSize = 36.0;
+            TextBlock label = new TextBlock
+            {
+                VerticalAlignment = VerticalAlignment.Center,
+                HorizontalAlignment = HorizontalAlignment.Center,
+                Foreground = new SolidColorBrush {Color = Color.FromArgb(255, 255, 255, 255)},
+                FontSize = 36.0
+            };
             labelGrid.Children.Add(label);
 
             // Add labelPanel to 1st row of tile

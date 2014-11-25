@@ -24,10 +24,8 @@ namespace TheLivingRoom
                 _triggerPoints.Add(newTriggerPoint);
                 return true;
             }
-            else
-            {
-                return false;
-            }
+            
+            return false;
         }
 
         public TriggerPoint GetTriggerPointAtIndex(int index)
@@ -52,6 +50,6 @@ namespace TheLivingRoom
         // Members
         public string Name { get; set; }
         
-        private List<TriggerPoint> _triggerPoints { get; set; }
+        private readonly List<TriggerPoint> _triggerPoints;
     }
 }

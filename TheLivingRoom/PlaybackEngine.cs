@@ -17,14 +17,12 @@ namespace TheLivingRoom
             {
                 return _instance;
             }
-            else
-            {
-                _instance = new PlaybackEngine();
-                return _instance;
-            }
+            
+            _instance = new PlaybackEngine();
+            return _instance;
         }
 
-        private static PlaybackEngine _instance { get; set; }
+        private static PlaybackEngine _instance;
 
         // Private constructor
         private PlaybackEngine()
@@ -106,25 +104,17 @@ namespace TheLivingRoom
             double maxAdjustFactorPerParameter = playbackVolume / _parameters.Count;
 
             // Adjust playbackVolume according to parameters
-            foreach (PlaybackParameter param in _parameters)
-            {
-                // Parameter adjustment ratio is its level relative to max level of 50
-                double paramAdjustmentRatio = param.Level / 50.0;
+            playbackVolume += _parameters
+                .Select(param => param.Level/50.0)
+                .Select(paramAdjustmentRatio => paramAdjustmentRatio*maxAdjustFactorPerParameter)
+                .Sum();
 
-                // Parameter adjustment factor is the ratio multiplied by the max factor per parameter
-                // Note that this also accounts for negative adjustments properly
-                double paramAdjustmentFactor = paramAdjustmentRatio * maxAdjustFactorPerParameter;
-
-                // Adjust playback volume according to the level of this parameter
-                playbackVolume += paramAdjustmentFactor;
-            }
-            
             return playbackVolume;
         }
 
         // Members
-        private List<PlaybackParameter> _parameters { get; set; }
+        private readonly List<PlaybackParameter> _parameters;
 
-        private double _systemVolumeLimit { get; set; } // upper limit of playback volume
+        private double _systemVolumeLimit; // upper limit of playback volume
     }
 }

@@ -24,12 +24,9 @@ namespace TheLivingRoom
         }
 
         public bool Clear() {
-            if (TriggerSound != null)
-            {
-                TriggerSound = null;
-                return true;
-            }
-            return false;
+            if (TriggerSound == null) return false;
+            TriggerSound = null;
+            return true;
         }
 
         public Sound TriggerSound { get; set; }

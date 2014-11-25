@@ -28,15 +28,12 @@ namespace TheLivingRoom
             {
                 return false;
             }
-            else
-            {
-                Level = newLevel;
-                return true;
-            }
+            Level = newLevel;
+            return true;
         }
 
         // Default level: system volume reduced by 25 percent
-        private static int DefaultLevel = -25;
+        private const int DefaultLevel = -25;
 
         // Members
         public int Level { get; private set; }
