@@ -88,23 +88,23 @@ namespace TheLivingRoom
         {
             // Create Sounds associated with Default SoundPack
             Sound piano = new Sound("Piano");
-            piano.SetSource("ms-appx:///Assets/SoundPacks/Default/Audio/piano.mp3");
+            piano.InitWithSource("ms-appx:///Assets/SoundPacks/Default/Audio/piano.mp3");
             Sound violin = new Sound("Violin");
-            violin.SetSource("ms-appx:///Assets/SoundPacks/Default/Audio/violin.mp3");
+            violin.InitWithSource("ms-appx:///Assets/SoundPacks/Default/Audio/violin.mp3");
             Sound trumpet = new Sound("Trumpet");
-            trumpet.SetSource("ms-appx:///Assets/SoundPacks/Default/Audio/trumpet.mp3");
+            trumpet.InitWithSource("ms-appx:///Assets/SoundPacks/Default/Audio/trumpet.mp3");
             Sound guitar = new Sound("Guitar");
-            guitar.SetSource("ms-appx:///Assets/SoundPacks/Default/Audio/guitar.mp3");
+            guitar.InitWithSource("ms-appx:///Assets/SoundPacks/Default/Audio/guitar.mp3");
             Sound drums = new Sound("Drums");
-            drums.SetSource("ms-appx:///Assets/SoundPacks/Default/Audio/drums.mp3");
+            drums.InitWithSource("ms-appx:///Assets/SoundPacks/Default/Audio/drums.mp3");
             Sound cello = new Sound("Cello");
-            cello.SetSource("ms-appx:///Assets/SoundPacks/Default/Audio/cello.mp3");
+            cello.InitWithSource("ms-appx:///Assets/SoundPacks/Default/Audio/cello.mp3");
             Sound xylophone = new Sound("Xylophone");
-            xylophone.SetSource("ms-appx:///Assets/SoundPacks/Default/Audio/xylophone.mp3");
+            xylophone.InitWithSource("ms-appx:///Assets/SoundPacks/Default/Audio/xylophone.mp3");
             Sound sax = new Sound("Saxophone");
-            sax.SetSource("ms-appx:///Assets/SoundPacks/Default/Audio/sax.mp3");
+            sax.InitWithSource("ms-appx:///Assets/SoundPacks/Default/Audio/sax.mp3");
             Sound flute = new Sound("Flute");
-            flute.SetSource("ms-appx:///Assets/SoundPacks/Default/Audio/flute.mp3");
+            flute.InitWithSource("ms-appx:///Assets/SoundPacks/Default/Audio/flute.mp3");
 
             // Add to Default
             SoundPack defaultPack = new SoundPack("Default");

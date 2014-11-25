@@ -31,7 +31,7 @@ namespace TheLivingRoom
         {
             // Initialize members
             _parameters = new List<PlaybackParameter>();
-            _systemVolumeLimit = 0.1;
+            _systemVolumeLimit = 0.7;
 
             CreateDefaultParameters();
         }
@@ -46,20 +46,15 @@ namespace TheLivingRoom
         public void PlaySound(Sound sound)
         {
             // Seek to beginning of sound
-            sound.Sample.Position = new TimeSpan(0, 0, 0);
-            sound.Sample.AutoPlay = true;
+            sound.ResetToBeginning();
 
             // Calculate current volume according to parameters and system volume limit
-            sound.Sample.Volume = CalculatePlaybackVolume();
+            sound.AdjustVolume(CalculatePlaybackVolume());
 
-            // Play sample
-            if (sound.Sample.CurrentState == MediaElementState.Playing)
-            {
-                // TODO: Allow for either same Sound to be triggered overlapping or restart immediately.
-                sound.Sample.Position = new TimeSpan(0, 0, 0);
-            }
+            // TODO: Figure out way to play same Sound overlapping (use case: fast input)
 
-            sound.Sample.Play();
+            // Play Sound
+            sound.Play();
         }
 
         public void PlaySoundPreview(Sound sound)
@@ -85,7 +80,7 @@ namespace TheLivingRoom
 
         public bool SetVolumeLimit(double newVolume)
         {
-            if (newVolume > 0.0 && newVolume < 1.0)
+            if (newVolume >= 0.0 && newVolume <= 1.0)
             {
                 _systemVolumeLimit = newVolume;
                 return true;
