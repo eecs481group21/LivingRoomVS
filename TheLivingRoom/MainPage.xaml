@@ -74,7 +74,6 @@
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <Button Content="Piano" HorizontalAlignment="Center" VerticalAlignment="Center" Background="#B372CF3C" Click="Button_Click"/>
             </Grid>
         </Grid>
     </Grid>

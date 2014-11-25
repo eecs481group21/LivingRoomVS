@@ -1,4 +1,6 @@
-﻿using TheLivingRoom.Common;
+﻿using System.Diagnostics;
+using Windows.UI;
+using TheLivingRoom.Common;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -53,6 +55,9 @@ namespace TheLivingRoom
 
             // Listen to global KeyDown events
             Window.Current.CoreWindow.KeyDown += CoreWindow_KeyDown;
+
+            // Get all of the sounds available
+            RenderSounds();
         }
 
         private void CoreWindow_KeyDown(Windows.UI.Core.CoreWindow sender, Windows.UI.Core.KeyEventArgs args)
@@ -127,11 +132,41 @@ namespace TheLivingRoom
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            Button clickedButton = (Button) sender;
+            int row = (int)clickedButton.GetValue(Grid.RowProperty);
+            int col = (int)clickedButton.GetValue(Grid.ColumnProperty);
+
+            int soundId = row * 3 + col;
+
             // Get piano sound
-            Sound pianoSound = FurnitureEngine.GetInstance().GetSoundPack().Sounds[0];
+            Sound theSound = FurnitureEngine.GetInstance().GetSoundPack().Sounds[soundId];
 
             // Play piano sound with playback engine
-            PlaybackEngine.GetInstance().PlaySound(pianoSound);           
+            PlaybackEngine.GetInstance().PlaySound(theSound);           
+        }
+
+        // Populate the sound grid according to the current chosen SoundPack
+        private void RenderSounds()
+        {
+            List<Sound> sounds = FurnitureEngine.GetInstance().GetSoundPack().Sounds;
+
+            for (int i = 0; i < sounds.Count; ++i)
+            {
+                var soundButton = new Button
+                {
+                    Content = sounds[i].Name,
+                    HorizontalAlignment = HorizontalAlignment.Stretch,
+                    VerticalAlignment = VerticalAlignment.Stretch,
+                };
+
+                soundButton.Click += Button_Click;
+                soundButton.Background = new SolidColorBrush { Color = Color.FromArgb(179, 114, 207, 60) };
+                soundButton.SetValue(Grid.RowProperty, i / 3);
+                soundButton.SetValue(Grid.ColumnProperty, i % 3);
+
+                soundGrid.Children.Add(soundButton);
+
+            }
         }
     }
 }
