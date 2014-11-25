@@ -168,5 +168,10 @@ namespace TheLivingRoom
 
             }
         }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            PlaybackEngine.GetInstance().SetVolumeLimit(1.0);
+        }
     }
 }

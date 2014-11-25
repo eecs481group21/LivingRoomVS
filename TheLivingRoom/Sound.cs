@@ -10,27 +10,60 @@ namespace TheLivingRoom
     {
         public Sound(string name) {
             Name = name;
-            Sample = new Windows.UI.Xaml.Controls.MediaElement();
+            _sample = new Windows.UI.Xaml.Controls.MediaElement();
+            _stream = null;
 
             // Prevent autoplay of all samples when the UI loads
-            Sample.AutoPlay = false;
+            _sample.AutoPlay = false;
         }
 
         // Cannot be in constructor because async methods cannot be called from constructors
-        public async void SetSource(string sourceFile) {
+        public async void InitWithSource(string sourceFile) {
             // Get file with URI
             Uri uri = new Uri(sourceFile);
             Windows.Storage.StorageFile file = await Windows.Storage.StorageFile.GetFileFromApplicationUriAsync(uri);
 
-            // Get a stream from the audio file
-            Windows.Storage.Streams.IRandomAccessStream stream = await file.OpenAsync(Windows.Storage.FileAccessMode.Read);
-
-            // Set the source of the Sample to the stream
-            Sample.SetSource(stream, file.ContentType);
+            // Configure stream-related members
+            _stream = await file.OpenAsync(Windows.Storage.FileAccessMode.Read);
+            _mimeType = file.ContentType;
         }
 
+        // Play Sound
+        public void Play()
+        {
+            _sample.Play();
+        }
+
+        // Adjust volume of Sound.  Must reset source because volume does not change
+        // reliably after the source is set.
+        public void AdjustVolume(double newVol)
+        {
+            // Check for valid volume
+            if (newVol >= 0.0 && newVol <= 1.0)
+            {
+                // 1. Reset the MediaElement (no alternative to clear source)
+                // 2. Adjust the volume
+                // 3. Set the source.
+                _sample = new Windows.UI.Xaml.Controls.MediaElement();
+                _sample.Volume = newVol;
+                _sample.SetSource(_stream, _mimeType);
+            }
+        }
+
+        // Seek to beginning of Sound
+        public void ResetToBeginning()
+        {
+            _sample.Position = new TimeSpan(0, 0, 0);
+            _sample.AutoPlay = true;
+        }
+
+        // Members
         public string Name { get; private set; }
 
-        public Windows.UI.Xaml.Controls.MediaElement Sample { get; private set; }
+        private Windows.UI.Xaml.Controls.MediaElement _sample { get; set; }
+
+        // Private stream-related members
+        private Windows.Storage.Streams.IRandomAccessStream _stream { get; set; }
+        private string _mimeType { get; set; }
     }
 }
