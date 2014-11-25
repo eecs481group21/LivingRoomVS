@@ -9,53 +9,49 @@ namespace TheLivingRoom
     class Furniture
     {
 
-        public Furniture(string name, double height, double width)
+        public Furniture(string name)
         {
             Name = name;
-            Height = height;
-            Width = Width;
-            _layout = new Dictionary<Point, TriggerPoint>();
+
+            _triggerPoints = new List<TriggerPoint>();
         }
 
-        public bool AddTriggerPoint(double x, double y, TriggerPoint newTriggerPoint)
+        public bool AddTriggerPoint(TriggerPoint newTriggerPoint)
         {
-            // Upper left position (0,0)
-            if (x > Width || x < 0 || y > Height || y < 0)
+            // Each Furniture can have at most 3 trigger points
+            if (_triggerPoints.Count < 3)
             {
-                return false;
-            }
-            else if (newTriggerPoint == null) {
-                return false;
+                _triggerPoints.Add(newTriggerPoint);
+                return true;
             }
             else
             {
-                Point newTriggerLocation = new Point(x, y);
-
-                // Make certain no TriggerPoint is already in this location
-                if (_layout.ContainsKey(newTriggerLocation))
-                {
-                    return false;
-                }
-                else
-                {
-                    // Add this TriggerPoint to the layout
-                    _layout.Add(newTriggerLocation, newTriggerPoint);
-                    return true;
-                }
+                return false;
             }
+        }
+
+        public TriggerPoint GetTriggerPointAtIndex(int index)
+        {
+            if (index < _triggerPoints.Count && index >= 0)
+            {
+                return _triggerPoints[index];
+            }
+            return null;
+        }
+
+        public int NumTriggerPoints()
+        {
+            return _triggerPoints.Count;
         }
 
         public void ClearTriggerPoints()
         {
-            _layout.Clear();
+            _triggerPoints.Clear();
         }
 
         // Members
         public string Name { get; set; }
         
-        private Dictionary<Point, TriggerPoint> _layout { get; set; }
-
-        public double Height { get; private set; }
-        public double Width { get; private set; }
+        private List<TriggerPoint> _triggerPoints { get; set; }
     }
 }

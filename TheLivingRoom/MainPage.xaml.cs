@@ -128,12 +128,12 @@ namespace TheLivingRoom
             this.Frame.Navigate(typeof(SettingsPage));
         }
 
-        // Play preview of Sound corresponding to this SoundButton
-        private void SoundButton_Click(object sender, RoutedEventArgs e)
+        // Play preview of Sound corresponding to this SoundTile
+        private void SoundTile_PointerPressed(object sender, RoutedEventArgs e)
         {
-            Button clickedButton = (Button) sender;
-            int row = (int)clickedButton.GetValue(Grid.RowProperty);
-            int col = (int)clickedButton.GetValue(Grid.ColumnProperty);
+            Grid clickedTile = (Grid)sender;
+            int row = (int)clickedTile.GetValue(Grid.RowProperty);
+            int col = (int)clickedTile.GetValue(Grid.ColumnProperty);
 
             int soundId = row * 3 + col;
 
@@ -144,10 +144,21 @@ namespace TheLivingRoom
             PlaybackEngine.GetInstance().PlaySoundPreview(theSound);           
         }
 
+        private void TriggerTile_PointerPressed(object sender, PointerRoutedEventArgs e)
+        {
+            Grid clickedTile = (Grid)sender;
+            int row = (int)clickedTile.GetValue(Grid.RowProperty);
+
+            int triggerNumber = row;
+        }
+
         // Prepare this furniture trigger point for assignment.
         // Remove old assignment if applicable.
         private void FurnitureButton_Click(object sender, RoutedEventArgs e)
         {
+            Button clickedButton = (Button)sender;
+            int row = (int)clickedButton.GetValue(Grid.RowProperty);
+
             
         }
 
@@ -165,20 +176,28 @@ namespace TheLivingRoom
 
             for (int i = 0; i < numSoundButtons; ++i)
             {
-                var soundButton = new Button
-                {
-                    Content = sounds[i].Name,
-                    HorizontalAlignment = HorizontalAlignment.Stretch,
-                    VerticalAlignment = VerticalAlignment.Stretch,
-                };
+                Grid soundTile = CreateEmptyTile();
+                soundTile.Background = new SolidColorBrush { Color = Color.FromArgb(255, 204, 248, 255) };
 
-                soundButton.Click += SoundButton_Click;
-                soundButton.Background = new SolidColorBrush { Color = Color.FromArgb(179, 114, 207, 60) };
-                soundButton.SetValue(Grid.RowProperty, i / 3);
-                soundButton.SetValue(Grid.ColumnProperty, i % 3);
+                // Set tile image to instrument icon
+                Image soundTileImage = soundTile.Children[0] as Image;
+                string uriString = "ms-appx:///Assets/SoundPacks/Default/Icons/" + sounds[i].Name.ToLower() + ".png";
+                soundTileImage.Source = new Windows.UI.Xaml.Media.Imaging.BitmapImage(new Uri(uriString));
 
-                soundGrid.Children.Add(soundButton);
+                // Set the tile label to the instrument name
+                Grid tileLabelGrid = soundTile.Children[1] as Grid;
+                TextBlock tileLabel = tileLabelGrid.Children[0] as TextBlock;
+                tileLabel.Text = sounds[i].Name;
 
+                // Add the tile in the appropriate row/column
+                soundTile.SetValue(Grid.ColumnProperty, 0);
+                soundTile.SetValue(Grid.RowProperty, i / 3);
+                soundTile.SetValue(Grid.ColumnProperty, i % 3);
+
+                // Handle PointerPressed event (similar to Click, but for Grids)
+                soundTile.PointerPressed += SoundTile_PointerPressed;
+
+                soundGrid.Children.Add(soundTile);
             }
         }
 
@@ -187,21 +206,113 @@ namespace TheLivingRoom
         {
             List<Furniture> furniture = FurnitureEngine.GetInstance().GetFurnitureItems();
 
-            for (int i = 0; i < furniture.Count; ++i)
+            // At most 3 pieces of furniture are represented in furnitureGrid
+            int numFurnitureGrids = Math.Min(furniture.Count, 3);
+
+            // Render each piece of furniture as a Grid with 4 columns
+            for (int i = 0; i < numFurnitureGrids; ++i)
             {
-                var furnitureButton = new Button
+                Grid curFurnitureGrid = new Grid();
+                curFurnitureGrid.HorizontalAlignment = HorizontalAlignment.Stretch;
+                curFurnitureGrid.VerticalAlignment = VerticalAlignment.Stretch;
+                ColumnDefinition c1 = new ColumnDefinition();
+                ColumnDefinition c2 = new ColumnDefinition();
+                ColumnDefinition c3 = new ColumnDefinition();
+                ColumnDefinition c4 = new ColumnDefinition();
+                // Set equal widths
+                c1.Width = new GridLength(1, GridUnitType.Star);
+                c2.Width = new GridLength(1, GridUnitType.Star);
+                c3.Width = new GridLength(1, GridUnitType.Star);
+                c4.Width = new GridLength(1, GridUnitType.Star);
+                curFurnitureGrid.ColumnDefinitions.Add(c1);
+                curFurnitureGrid.ColumnDefinitions.Add(c2);
+                curFurnitureGrid.ColumnDefinitions.Add(c3);
+                curFurnitureGrid.ColumnDefinitions.Add(c4);
+
+                
+                // Create layout image grid in column 0
+                Grid imageTile = CreateEmptyTile();
+
+                // First child is image, second is labelGrid. First child of labelGrid is label.
+                Image tileImage = imageTile.Children[0] as Image;
+                tileImage.Source = new Windows.UI.Xaml.Media.Imaging.BitmapImage(new Uri("ms-appx:///Assets/chair.png"));
+                Grid tileLabelGrid = imageTile.Children[1] as Grid;
+                TextBlock tileLabel = tileLabelGrid.Children[0] as TextBlock;
+                tileLabel.Text = "Chair";
+
+                imageTile.SetValue(Grid.ColumnProperty, 0);
+                curFurnitureGrid.Children.Add(imageTile);
+                
+                // Add up to three Furniture TriggerPoints in curFurnitureGrid columns 1-3
+                for (int j = 0; j < furniture[i].NumTriggerPoints(); ++j)
                 {
-                    Content = furniture[i].Name,
-                    HorizontalAlignment = HorizontalAlignment.Stretch,
-                    VerticalAlignment = VerticalAlignment.Stretch,
-                };
+                    // Create tile grid in column j + 1
+                    Grid triggerTile = CreateEmptyTile();
 
-                 furnitureButton.Click += FurnitureButton_Click;
-                furnitureButton.Background = new SolidColorBrush { Color = Color.FromArgb(179, 60, 114, 207) };
-                furnitureButton.SetValue(Grid.RowProperty, i);
+                    // Second child is labelGrid. First child of labelGrid is label.
+                    Image tileTriggerImage = triggerTile.Children[0] as Image;
+                    tileTriggerImage.Source = new Windows.UI.Xaml.Media.Imaging.BitmapImage(new Uri("ms-appx:///Assets/not_set.png"));
+                    Grid tileTriggerLabelGrid = triggerTile.Children[1] as Grid;
+                    TextBlock tileTriggerLabel = tileTriggerLabelGrid.Children[0] as TextBlock;
+                    tileTriggerLabel.Text = "Trigger " + (j + 1);
 
-                furnitureGrid.Children.Add(furnitureButton);
+                    // Handle PointerPressed events from all Trigger tiles
+                    triggerTile.PointerPressed += TriggerTile_PointerPressed;
+
+                    triggerTile.SetValue(Grid.ColumnProperty, (j + 1));
+                    curFurnitureGrid.Children.Add(triggerTile);
+                }
+                              
+                // Add curFurnitureGrid to furnitureGrid
+                curFurnitureGrid.SetValue(Grid.RowProperty, i);
+                furnitureGrid.Children.Add(curFurnitureGrid);
             }
+        }
+
+        private Grid CreateEmptyTile()
+        {
+            Grid tileGrid = new Grid();
+            RowDefinition r1 = new RowDefinition(); // Image Row
+            RowDefinition r2 = new RowDefinition(); // Label Row
+            r1.Height = new GridLength(3, GridUnitType.Star);
+            r2.Height = new GridLength(1, GridUnitType.Star);
+            tileGrid.RowDefinitions.Add(r1);
+            tileGrid.RowDefinitions.Add(r2);
+
+            // Stretch Grid to fill parent
+            tileGrid.HorizontalAlignment = HorizontalAlignment.Stretch;
+            tileGrid.VerticalAlignment = VerticalAlignment.Stretch;
+            tileGrid.Margin = new Thickness(10, 10, 10, 10);
+            tileGrid.Background = new SolidColorBrush { Color = Color.FromArgb(255, 255, 255, 255) };
+            tileGrid.IsTapEnabled = true;
+
+            // Add image to 0th row of tile
+            Image image = new Image(); // No source initially
+            image.Stretch = Stretch.None;
+            image.HorizontalAlignment = HorizontalAlignment.Stretch;
+            image.VerticalAlignment = VerticalAlignment.Center;
+            image.SetValue(Grid.RowProperty, 0);
+            tileGrid.Children.Add(image);
+
+            // Put label in a StackPanel (to change background color)
+            Grid labelGrid = new Grid();
+            labelGrid.VerticalAlignment = VerticalAlignment.Stretch;
+            labelGrid.HorizontalAlignment = HorizontalAlignment.Stretch;
+            labelGrid.Background = new SolidColorBrush { Color = Color.FromArgb(255, 64, 64, 64) };
+
+            // Create TextBlock and add to labelPanel
+            TextBlock label = new TextBlock();
+            label.VerticalAlignment = VerticalAlignment.Center;
+            label.HorizontalAlignment = HorizontalAlignment.Center;
+            label.Foreground = new SolidColorBrush { Color = Color.FromArgb(255, 255, 255, 255) };
+            label.FontSize = 36.0;
+            labelGrid.Children.Add(label);
+
+            // Add labelPanel to 1st row of tile
+            labelGrid.SetValue(Grid.RowProperty, 1);
+            tileGrid.Children.Add(labelGrid);
+
+            return tileGrid;
         }
     }
 }

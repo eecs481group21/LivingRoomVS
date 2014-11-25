@@ -143,7 +143,9 @@
     <None Include="TheLivingRoom_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\chair.png" />
     <Content Include="Assets\Logo.scale-100.png" />
+    <Content Include="Assets\not_set.png" />
     <Content Include="Assets\SoundPacks\Default\Audio\cello.mp3" />
     <Content Include="Assets\SoundPacks\Default\Audio\drums.mp3" />
     <Content Include="Assets\SoundPacks\Default\Audio\flute.mp3" />
@@ -154,6 +156,15 @@
     <Content Include="Assets\SoundPacks\Default\Audio\trumpet.mp3" />
     <Content Include="Assets\SoundPacks\Default\Audio\violin.mp3" />
     <Content Include="Assets\SoundPacks\Default\Audio\xylophone.mp3" />
+    <Content Include="Assets\SoundPacks\Default\Icons\cello.png" />
+    <Content Include="Assets\SoundPacks\Default\Icons\drums.png" />
+    <Content Include="Assets\SoundPacks\Default\Icons\flute.png" />
+    <Content Include="Assets\SoundPacks\Default\Icons\guitar.png" />
+    <Content Include="Assets\SoundPacks\Default\Icons\piano.png" />
+    <Content Include="Assets\SoundPacks\Default\Icons\saxophone.png" />
+    <Content Include="Assets\SoundPacks\Default\Icons\trumpet.png" />
+    <Content Include="Assets\SoundPacks\Default\Icons\violin.png" />
+    <Content Include="Assets\SoundPacks\Default\Icons\xylophone.png" />
     <Content Include="Assets\SplashScreen.scale-100.png" />
     <Content Include="Assets\StoreLogo.scale-100.png" />
   </ItemGroup>
@@ -163,9 +174,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Assets\SoundPacks\Default\Icons\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>
   </PropertyGroup>

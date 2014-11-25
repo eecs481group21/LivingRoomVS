@@ -126,9 +126,9 @@ namespace TheLivingRoom
         private void CreateChair()
         {
             // Create a chair with one TriggerPoint
-            Furniture chair = new Furniture("Chair", 5.0, 5.0);
+            Furniture chair = new Furniture("Chair");
             TriggerPoint chairSeat = new TriggerPoint();
-            chair.AddTriggerPoint(2.5, 2.5, chairSeat);
+            chair.AddTriggerPoint(chairSeat);
             _furniture.Add(chair);
       
             // TriggerPoint Key must be hard-coded b/c corresponding key
