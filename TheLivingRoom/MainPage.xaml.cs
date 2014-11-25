@@ -290,6 +290,12 @@ namespace TheLivingRoom
         {
             List<Furniture> furniture = FurnitureEngine.GetInstance().GetFurnitureItems();
 
+            // Furniture cell colors are purple, turquoise, yellow
+            List<SolidColorBrush> furnitureCellColors = new List<SolidColorBrush>();
+            furnitureCellColors.Add(new SolidColorBrush { Color = Color.FromArgb(255, 227, 156, 255) });
+            furnitureCellColors.Add(new SolidColorBrush { Color = Color.FromArgb(255, 122, 255, 222) });
+            furnitureCellColors.Add(new SolidColorBrush { Color = Color.FromArgb(255, 242, 255, 122) });
+
             // At most 3 pieces of furniture are represented in furnitureGrid
             int numFurnitureGrids = Math.Min(furniture.Count, 3);
 
@@ -299,13 +305,31 @@ namespace TheLivingRoom
                 Grid curFurnitureGrid = new Grid
                 {
                     HorizontalAlignment = HorizontalAlignment.Stretch,
-                    VerticalAlignment = VerticalAlignment.Stretch
+                    VerticalAlignment = VerticalAlignment.Stretch,
+                    Background = furnitureCellColors[i]
                 };
+
+                // Give proper margin to curFurnitureGrid
+                const int fullMargin = 20;
+                const int halfMargin = 10;
+                if (i == 0)
+                {
+                    curFurnitureGrid.Margin = new Thickness(fullMargin, fullMargin, fullMargin, halfMargin);
+                }
+                else if (i == 1)
+                {
+                    curFurnitureGrid.Margin = new Thickness(fullMargin, halfMargin, fullMargin, halfMargin);
+                }
+                else
+                {
+                    curFurnitureGrid.Margin = new Thickness(fullMargin, halfMargin, fullMargin, fullMargin);
+                }
+
+                // Set up columns and spacing
                 ColumnDefinition c1 = new ColumnDefinition();
                 ColumnDefinition c2 = new ColumnDefinition();
                 ColumnDefinition c3 = new ColumnDefinition();
                 ColumnDefinition c4 = new ColumnDefinition();
-                // Set equal widths
                 c1.Width = new GridLength(1, GridUnitType.Star);
                 c2.Width = new GridLength(1, GridUnitType.Star);
                 c3.Width = new GridLength(1, GridUnitType.Star);
@@ -314,18 +338,9 @@ namespace TheLivingRoom
                 curFurnitureGrid.ColumnDefinitions.Add(c2);
                 curFurnitureGrid.ColumnDefinitions.Add(c3);
                 curFurnitureGrid.ColumnDefinitions.Add(c4);
-
-                
-                // Create layout image grid in column 0
-                Grid imageTile = CreateEmptyTile();
-
-                // First child is image, second is labelGrid. First child of labelGrid is label.
-                Image tileImage = imageTile.Children[0] as Image;
-                tileImage.Source = new Windows.UI.Xaml.Media.Imaging.BitmapImage(new Uri("ms-appx:///Assets/chair.png"));
-                Grid tileLabelGrid = imageTile.Children[1] as Grid;
-                TextBlock tileLabel = tileLabelGrid.Children[0] as TextBlock;
-                tileLabel.Text = "Chair";
-
+          
+                // Create Furniture layout tile in column 0
+                Grid imageTile = CreateFurnitureLayoutTile(furniture[i].Name);
                 imageTile.SetValue(Grid.ColumnProperty, 0);
                 curFurnitureGrid.Children.Add(imageTile);
                 
@@ -334,6 +349,11 @@ namespace TheLivingRoom
                 {
                     // Create tile grid in column j + 1
                     Grid triggerTile = CreateEmptyTile();
+                    // Give extra right margin to final column
+                    if (j == 2)
+                    {
+                        triggerTile.Margin = new Thickness(10, 10, 20, 10);
+                    }
 
                     // Second child is labelGrid. First child of labelGrid is label.
                     Image tileTriggerImage = triggerTile.Children[0] as Image;
@@ -406,6 +426,29 @@ namespace TheLivingRoom
             tileGrid.Children.Add(labelGrid);
 
             return tileGrid;
+        }
+
+        private static Grid CreateFurnitureLayoutTile(string name)
+        {
+            Grid furnitureLayoutTile = CreateEmptyTile();
+
+            // Make background transparent
+            furnitureLayoutTile.Background.Opacity = 0.0;
+
+            // Set layout image
+            Image layoutImage = furnitureLayoutTile.Children[0] as Image;
+            string layoutImageUriString = "ms-appx:///Assets/" + name.ToLower() + ".png";
+            layoutImage.Source = new Windows.UI.Xaml.Media.Imaging.BitmapImage(new Uri(layoutImageUriString));
+            
+            // Make name label background transparent and change font color (grey) and weight (bold)
+            Grid furnitureNameLabelGrid = furnitureLayoutTile.Children[1] as Grid;
+            furnitureNameLabelGrid.Background.Opacity = 0.0;
+            TextBlock nameLabel = furnitureNameLabelGrid.Children[0] as TextBlock;
+            nameLabel.Foreground = new SolidColorBrush { Color = Color.FromArgb(255, 77, 77, 77) };
+            nameLabel.FontSize = 48.0;
+            nameLabel.Text = name;
+
+            return furnitureLayoutTile;
         }
     }
 }

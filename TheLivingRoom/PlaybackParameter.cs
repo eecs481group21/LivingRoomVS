@@ -36,7 +36,9 @@ namespace TheLivingRoom
         private const int DefaultLevel = -25;
 
         // Members
-        public int Level { get; private set; }
+        public int Level { get; private set; } // Absolute effect on system volume
+
+        public int Multiplier { get; private set; } // Configuration level regarding effect on system volume
 
         private bool IsOn { get; set; }
     }
