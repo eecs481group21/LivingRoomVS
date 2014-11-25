@@ -9,8 +9,9 @@ namespace TheLivingRoom
     class Furniture
     {
 
-        public Furniture(double height, double width)
+        public Furniture(string name, double height, double width)
         {
+            Name = name;
             Height = height;
             Width = Width;
             _layout = new Dictionary<Point, TriggerPoint>();
