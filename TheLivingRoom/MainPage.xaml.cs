@@ -149,7 +149,7 @@ namespace TheLivingRoom
             Sound theSound = FurnitureEngine.GetInstance().GetSoundPack().Sounds[soundId];
 
             // Check if a TriggerPoint is in the process of being assigned.
-            // If so, assign the TriggerPoint. Otherwise, play a preview of the Sound.
+            // If so, assign the TriggerPoint.
             if (toBeAssignedTriggerPoint != null)
             {
                 // Set trigger point
@@ -165,13 +165,11 @@ namespace TheLivingRoom
 
                 // Clear to-be-assigned helpers
                 toBeAssignedTriggerPoint = null;
-                toBeAssignedTriggerTile = null;
+                toBeAssignedTriggerTile = null;                
             }
-            else
-            {
-                // Play preview of Sound
-                PlaybackEngine.GetInstance().PlaySoundPreview(theSound);
-            }
+
+            // Play preview of Sound
+            PlaybackEngine.GetInstance().PlaySoundPreview(theSound);            
         }
 
         private void TriggerTile_PointerPressed(object sender, PointerRoutedEventArgs e)
