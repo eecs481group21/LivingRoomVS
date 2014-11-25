@@ -105,8 +105,11 @@ namespace TheLivingRoom
 
             // Adjust playbackVolume according to parameters
             playbackVolume += _parameters
+                // Parameter adjustment factor is the ratio multiplied by the max factor per parameter
                 .Select(param => param.Level/50.0)
-                .Select(paramAdjustmentRatio => paramAdjustmentRatio*maxAdjustFactorPerParameter)
+                // Note that this also accounts for negative adjustments properly
+                .Select(paramAdjustmentRatio => paramAdjustmentRatio * maxAdjustFactorPerParameter)
+                // Adjust playback volume according to the level of this parameter
                 .Sum();
 
             return playbackVolume;
