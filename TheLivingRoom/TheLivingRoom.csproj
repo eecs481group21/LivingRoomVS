@@ -144,8 +144,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\chair.png" />
+    <Content Include="Assets\hourglass.png" />
     <Content Include="Assets\Logo.scale-100.png" />
     <Content Include="Assets\not_set.png" />
+    <Content Include="Assets\not_set2.png" />
     <Content Include="Assets\pending.png" />
     <Content Include="Assets\SoundPacks\Default\Audio\cello.mp3" />
     <Content Include="Assets\SoundPacks\Default\Audio\drums.mp3" />

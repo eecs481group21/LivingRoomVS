@@ -49,7 +49,7 @@ namespace TheLivingRoom
 
         // Members
         public string Name { get; set; }
-        
-        private List<TriggerPoint> _triggerPoints;
+
+        private List<TriggerPoint> _triggerPoints { get; set; }
     }
 }

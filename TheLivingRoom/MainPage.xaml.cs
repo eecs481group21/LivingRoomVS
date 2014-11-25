@@ -149,16 +149,22 @@ namespace TheLivingRoom
             Sound theSound = FurnitureEngine.GetInstance().GetSoundPack().Sounds[soundId];
 
             // Check if a TriggerPoint is in the process of being assigned.
-            // If so, assign the TriggerPoint. Otherwise, play a preview of the Sound.
+            // If so, assign the TriggerPoint.
             if (toBeAssignedTriggerPoint != null)
             {
                 // Set trigger point
                 toBeAssignedTriggerPoint.Set(theSound);
 
-                // Set TriggerTile Thumbnail to Sound icon
+                // Set TriggerTile thumbnail to Sound icon
                 Image triggerTileThumbnail = toBeAssignedTriggerTile.Children[0] as Image;
                 Image soundTileThumbnail = clickedTile.Children[0] as Image;
                 triggerTileThumbnail.Source = soundTileThumbnail.Source;
+
+                // Reset TriggerTile label to triggernumber
+                int triggerNumber = (int)toBeAssignedTriggerTile.GetValue(Grid.ColumnProperty);
+                Grid triggerTileLabelGrid = toBeAssignedTriggerTile.Children[1] as Grid;
+                TextBlock triggerTileLabel = triggerTileLabelGrid.Children[0] as TextBlock;
+                triggerTileLabel.Text = triggerNumber.ToString();
 
                 // Change background color of TriggerTile to normal color (white)
                 toBeAssignedTriggerTile.Background = new SolidColorBrush { Color = Color.FromArgb(255, 255, 255, 255) };
@@ -190,7 +196,13 @@ namespace TheLivingRoom
             {
                 // Reset thumbnail
                 Image prevTileThumbnail = toBeAssignedTriggerTile.Children[0] as Image;
-                prevTileThumbnail.Source = new Windows.UI.Xaml.Media.Imaging.BitmapImage(new Uri("ms-appx:///Assets/not_set.png"));
+                prevTileThumbnail.Source = new Windows.UI.Xaml.Media.Imaging.BitmapImage(new Uri("ms-appx:///Assets/not_set2.png"));
+
+                // Reset label to trigger number
+                int prevTriggerNumber = (int)toBeAssignedTriggerTile.GetValue(Grid.ColumnProperty);
+                Grid prevTileLabelGrid = toBeAssignedTriggerTile.Children[1] as Grid;
+                TextBlock prevTileLabel = prevTileLabelGrid.Children[0] as TextBlock;
+                prevTileLabel.Text = prevTriggerNumber.ToString();
 
                 // Reset background color (to white)
                 toBeAssignedTriggerTile.Background = new SolidColorBrush { Color = Color.FromArgb(255, 255, 255, 255) };
@@ -207,9 +219,14 @@ namespace TheLivingRoom
                 toBeAssignedTriggerPoint.Clear();
             }
 
-            // Set thumbnail to "Pending" label
+            // Set thumbnail to pending "hourglass" icon
             Image tileThumbnail = toBeAssignedTriggerTile.Children[0] as Image;
-            tileThumbnail.Source = new Windows.UI.Xaml.Media.Imaging.BitmapImage(new Uri("ms-appx:///Assets/pending.png"));
+            tileThumbnail.Source = new Windows.UI.Xaml.Media.Imaging.BitmapImage(new Uri("ms-appx:///Assets/hourglass.png"));
+
+            // Set label to "Pending"
+            Grid tileLabelGrid = toBeAssignedTriggerTile.Children[1] as Grid;
+            TextBlock tileLabel = tileLabelGrid.Children[0] as TextBlock;
+            tileLabel.Text = "Pending";
 
             // Set Tile background to pending assignment color (light orange)
             toBeAssignedTriggerTile.Background = new SolidColorBrush { Color = Color.FromArgb(255, 247, 231, 178) };
@@ -319,10 +336,10 @@ namespace TheLivingRoom
 
                     // Second child is labelGrid. First child of labelGrid is label.
                     Image tileTriggerImage = triggerTile.Children[0] as Image;
-                    tileTriggerImage.Source = new Windows.UI.Xaml.Media.Imaging.BitmapImage(new Uri("ms-appx:///Assets/not_set.png"));
+                    tileTriggerImage.Source = new Windows.UI.Xaml.Media.Imaging.BitmapImage(new Uri("ms-appx:///Assets/not_set2.png"));
                     Grid tileTriggerLabelGrid = triggerTile.Children[1] as Grid;
                     TextBlock tileTriggerLabel = tileTriggerLabelGrid.Children[0] as TextBlock;
-                    tileTriggerLabel.Text = "Trigger " + (j + 1);
+                    tileTriggerLabel.Text = (j + 1).ToString();
 
                     // Handle PointerPressed events from all TriggerTiles (assignment)
                     triggerTile.PointerPressed += TriggerTile_PointerPressed;
