@@ -65,17 +65,7 @@ namespace TheLivingRoom
 
         private void CoreWindow_KeyDown(Windows.UI.Core.CoreWindow sender, Windows.UI.Core.KeyEventArgs args)
         {
-            // TODO: Handle all input by calling HandleInput in FurnitureEngine
-
-            // Proof of concept
-            if (args.VirtualKey == Windows.System.VirtualKey.A)
-            {
-                // Get piano sound
-                Sound pianoSound = FurnitureEngine.GetInstance().GetSoundPack().Sounds[7];
-
-                // Play piano sound with playback engine
-                PlaybackEngine.GetInstance().PlaySound(pianoSound);
-            }
+            FurnitureEngine.GetInstance().HandleTrigger(args.VirtualKey);
         }
 
         /// <summary>
@@ -128,12 +118,18 @@ namespace TheLivingRoom
 
         #endregion
 
+        /**************************************
+                  Click Event Handlers
+         **************************************/
+
+        // Handle transition to Settings page
         private void settingsButton_Click(object sender, RoutedEventArgs e)
         {
             this.Frame.Navigate(typeof(SettingsPage));
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        // Play preview of Sound corresponding to this SoundButton
+        private void SoundButton_Click(object sender, RoutedEventArgs e)
         {
             Button clickedButton = (Button) sender;
             int row = (int)clickedButton.GetValue(Grid.RowProperty);
@@ -141,19 +137,33 @@ namespace TheLivingRoom
 
             int soundId = row * 3 + col;
 
-            // Get piano sound
+            // Get Sound that corresponds with this cell
             Sound theSound = FurnitureEngine.GetInstance().GetSoundPack().Sounds[soundId];
 
-            // Play piano sound with playback engine
-            PlaybackEngine.GetInstance().PlaySound(theSound);           
+            // Play preview of Sound
+            PlaybackEngine.GetInstance().PlaySoundPreview(theSound);           
         }
 
-        // Populate the sound grid according to the current chosen SoundPack
+        // Prepare this furniture trigger point for assignment.
+        // Remove old assignment if applicable.
+        private void FurnitureButton_Click(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
+        /**************************************
+            Dynamic UI initialization methods
+         **************************************/
+
+        // Populate the soundGrid according to the current SoundPack
         private void RenderSounds()
         {
             List<Sound> sounds = FurnitureEngine.GetInstance().GetSoundPack().Sounds;
 
-            for (int i = 0; i < sounds.Count; ++i)
+            // Grid holds maximum of 9 Sounds
+            int numSoundButtons = Math.Min(sounds.Count, 9);
+
+            for (int i = 0; i < numSoundButtons; ++i)
             {
                 var soundButton = new Button
                 {
@@ -162,7 +172,7 @@ namespace TheLivingRoom
                     VerticalAlignment = VerticalAlignment.Stretch,
                 };
 
-                soundButton.Click += Button_Click;
+                soundButton.Click += SoundButton_Click;
                 soundButton.Background = new SolidColorBrush { Color = Color.FromArgb(179, 114, 207, 60) };
                 soundButton.SetValue(Grid.RowProperty, i / 3);
                 soundButton.SetValue(Grid.ColumnProperty, i % 3);
@@ -172,6 +182,7 @@ namespace TheLivingRoom
             }
         }
 
+        // Populate the furnitureGrid according to FurnitureEngine
         private void RenderFurniture()
         {
             List<Furniture> furniture = FurnitureEngine.GetInstance().GetFurnitureItems();
@@ -185,7 +196,7 @@ namespace TheLivingRoom
                     VerticalAlignment = VerticalAlignment.Stretch,
                 };
 
-                // furnitureButton.Click += Button_Click;
+                 furnitureButton.Click += FurnitureButton_Click;
                 furnitureButton.Background = new SolidColorBrush { Color = Color.FromArgb(179, 60, 114, 207) };
                 furnitureButton.SetValue(Grid.RowProperty, i);
 

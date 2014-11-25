@@ -35,17 +35,18 @@ namespace TheLivingRoom
             InitBetaDemo();
         }
 
-        public void HandleTrigger(char input)
+        public void HandleTrigger(Windows.System.VirtualKey keyEvent)
         {
-            // This should be called upon some event in the application
-            // Handle playback with PlayBackEngine
-        }
-
-        public void AddTrigger(Windows.System.VirtualKey key, TriggerPoint triggerPoint)
-        {
-            if (triggerPoint != null)
+            // See if keyEvent matches any triggers
+            foreach (KeyValuePair<Windows.System.VirtualKey, TriggerPoint> pair in _triggers)
             {
-                _triggers.Add(key, triggerPoint);
+                // If event matches the trigger and the trigger has been assigned a Sound
+                if (pair.Key == keyEvent && pair.Value.IsSet())
+                {
+                    // Play the sound according to playback parameters
+                    PlaybackEngine.GetInstance().PlaySound(pair.Value.TriggerSound);
+                    break;
+                }
             }
         }
 
@@ -128,7 +129,19 @@ namespace TheLivingRoom
             Furniture chair = new Furniture("Chair", 5.0, 5.0);
             TriggerPoint chairSeat = new TriggerPoint();
             chair.AddTriggerPoint(2.5, 2.5, chairSeat);
-            _furniture.Add(chair);            
+            _furniture.Add(chair);
+      
+            // TriggerPoint Key must be hard-coded b/c corresponding key
+            // is sent by Arduino application which is independent of this app
+            AddTrigger(Windows.System.VirtualKey.A, chairSeat);
+        }
+
+        private void AddTrigger(Windows.System.VirtualKey key, TriggerPoint triggerPoint)
+        {
+            if (triggerPoint != null)
+            {
+                _triggers.Add(key, triggerPoint);
+            }
         }
 
         // Members

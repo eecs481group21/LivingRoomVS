@@ -59,8 +59,10 @@ namespace TheLivingRoom
 
         public void PlaySoundPreview(Sound sound)
         {
-            // TODO: actually implement
-            PlaySound(sound);
+            // Play Sound at full volume
+            sound.ResetToBeginning();
+            sound.AdjustVolume(_systemVolumeLimit);
+            sound.Play();
         }
 
         public void StopPlayback()
