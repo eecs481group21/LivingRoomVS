@@ -58,6 +58,9 @@ namespace TheLivingRoom
 
             // Get all of the sounds available
             RenderSounds();
+
+            // Get all of the furniture available
+            RenderFurniture();
         }
 
         private void CoreWindow_KeyDown(Windows.UI.Core.CoreWindow sender, Windows.UI.Core.KeyEventArgs args)
@@ -169,9 +172,25 @@ namespace TheLivingRoom
             }
         }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
+        private void RenderFurniture()
         {
-            PlaybackEngine.GetInstance().SetVolumeLimit(1.0);
+            List<Furniture> furniture = FurnitureEngine.GetInstance().GetFurnitureItems();
+
+            for (int i = 0; i < furniture.Count; ++i)
+            {
+                var furnitureButton = new Button
+                {
+                    Content = furniture[i].Name,
+                    HorizontalAlignment = HorizontalAlignment.Stretch,
+                    VerticalAlignment = VerticalAlignment.Stretch,
+                };
+
+                // furnitureButton.Click += Button_Click;
+                furnitureButton.Background = new SolidColorBrush { Color = Color.FromArgb(179, 60, 114, 207) };
+                furnitureButton.SetValue(Grid.RowProperty, i);
+
+                furnitureGrid.Children.Add(furnitureButton);
+            }
         }
     }
 }

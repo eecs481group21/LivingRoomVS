@@ -59,6 +59,11 @@ namespace TheLivingRoom
             return null;
         }
 
+        public List<Furniture> GetFurnitureItems()
+        {
+            return _furniture.Count > 0 ? _furniture : null;
+        }
+
         public bool ChangeSoundPack(int newIndex)
         {
             if (newIndex < _soundPacks.Count)
@@ -120,7 +125,7 @@ namespace TheLivingRoom
         private void CreateChair()
         {
             // Create a chair with one TriggerPoint
-            Furniture chair = new Furniture(5.0, 5.0);
+            Furniture chair = new Furniture("Chair", 5.0, 5.0);
             TriggerPoint chairSeat = new TriggerPoint();
             chair.AddTriggerPoint(2.5, 2.5, chairSeat);
             _furniture.Add(chair);            
