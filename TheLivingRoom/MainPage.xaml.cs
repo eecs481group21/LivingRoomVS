@@ -438,8 +438,8 @@ namespace TheLivingRoom
             // Set layout image
             Image layoutImage = furnitureLayoutTile.Children[0] as Image;
             string layoutImageUriString = "ms-appx:///Assets/" + name.ToLower() + ".png";
-            layoutImage.Source = new Windows.UI.Xaml.Media.Imaging.BitmapImage(new Uri(layoutImageUriString));
-            
+            layoutImage.Source = new Windows.UI.Xaml.Media.Imaging.BitmapImage(new Uri(layoutImageUriString));            
+
             // Make name label background transparent and change font color (grey) and weight (bold)
             Grid furnitureNameLabelGrid = furnitureLayoutTile.Children[1] as Grid;
             furnitureNameLabelGrid.Background.Opacity = 0.0;
