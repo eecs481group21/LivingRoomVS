@@ -27,6 +27,10 @@ namespace TheLivingRoom
     {
         private NavigationHelper navigationHelper;
         private ObservableDictionary defaultViewModel = new ObservableDictionary();
+        
+        // Used in assigning Sounds to TriggerPoints
+        TriggerPoint toBeAssignedTriggerPoint;
+        Grid toBeAssignedTriggerTile;
 
         /// <summary>
         /// This can be changed to a strongly typed view model.
@@ -61,6 +65,10 @@ namespace TheLivingRoom
 
             // Get all of the furniture available
             RenderFurniture();
+
+            // Set to-be-assigned helpers to null
+            toBeAssignedTriggerPoint = null;
+            toBeAssignedTriggerTile = null;
         }
 
         private void CoreWindow_KeyDown(Windows.UI.Core.CoreWindow sender, Windows.UI.Core.KeyEventArgs args)
@@ -140,27 +148,88 @@ namespace TheLivingRoom
             // Get Sound that corresponds with this cell
             Sound theSound = FurnitureEngine.GetInstance().GetSoundPack().Sounds[soundId];
 
-            // Play preview of Sound
-            PlaybackEngine.GetInstance().PlaySoundPreview(theSound);           
+            // Check if a TriggerPoint is in the process of being assigned.
+            // If so, assign the TriggerPoint. Otherwise, play a preview of the Sound.
+            if (toBeAssignedTriggerPoint != null)
+            {
+                // Set trigger point
+                toBeAssignedTriggerPoint.Set(theSound);
+
+                // Set TriggerTile Thumbnail to Sound icon
+                Image triggerTileThumbnail = toBeAssignedTriggerTile.Children[0] as Image;
+                Image soundTileThumbnail = clickedTile.Children[0] as Image;
+                triggerTileThumbnail.Source = soundTileThumbnail.Source;
+
+                // Change background color of TriggerTile to normal color (white)
+                toBeAssignedTriggerTile.Background = new SolidColorBrush { Color = Color.FromArgb(255, 255, 255, 255) };
+
+                // Clear to-be-assigned helpers
+                toBeAssignedTriggerPoint = null;
+                toBeAssignedTriggerTile = null;
+            }
+            else
+            {
+                // Play preview of Sound
+                PlaybackEngine.GetInstance().PlaySoundPreview(theSound);
+            }
         }
 
         private void TriggerTile_PointerPressed(object sender, PointerRoutedEventArgs e)
         {
             Grid clickedTile = (Grid)sender;
-            int row = (int)clickedTile.GetValue(Grid.RowProperty);
 
-            int triggerNumber = row;
+            // Trigger number equal to column number of tile
+            int triggerNumber = (int)clickedTile.GetValue(Grid.ColumnProperty);
+
+            // Furniture number equal to row number of parent Grid object
+            int furnitureNumber = (int)clickedTile.Parent.GetValue(Grid.RowProperty);
+
+            // The only use case for pressing a TriggerTile is when setting its Sound
+            // Therefore, we always clear the the previous sound if applicable
+            // and wait for the user to press a SoundTile
+
+            // Check if another Trigger was pending and change it back to a "Not Set" tile
+            if (toBeAssignedTriggerTile != null)
+            {
+                // Reset thumbnail
+                Image prevTileThumbnail = toBeAssignedTriggerTile.Children[0] as Image;
+                prevTileThumbnail.Source = new Windows.UI.Xaml.Media.Imaging.BitmapImage(new Uri("ms-appx:///Assets/not_set.png"));
+
+                // Reset background color (to white)
+                toBeAssignedTriggerTile.Background = new SolidColorBrush { Color = Color.FromArgb(255, 255, 255, 255) };
+            }
+
+            // Set to-be-assigned helper members
+            toBeAssignedTriggerTile = clickedTile;
+            toBeAssignedTriggerPoint = FurnitureEngine.GetInstance().GetFurnitureAtIndex(furnitureNumber).GetTriggerPointAtIndex(triggerNumber - 1);
+
+            // Reset TriggerPoint, if applicable
+            if (toBeAssignedTriggerPoint.IsSet())
+            {
+                // Unassign Sound from this Trigger
+                toBeAssignedTriggerPoint.Clear();
+            }
+
+            // Set thumbnail to "Pending" label
+            Image tileThumbnail = toBeAssignedTriggerTile.Children[0] as Image;
+            tileThumbnail.Source = new Windows.UI.Xaml.Media.Imaging.BitmapImage(new Uri("ms-appx:///Assets/pending.png"));
+
+            // Set Tile background to pending assignment color (light orange)
+            toBeAssignedTriggerTile.Background = new SolidColorBrush { Color = Color.FromArgb(255, 247, 231, 178) };
         }
 
-        // Prepare this furniture trigger point for assignment.
-        // Remove old assignment if applicable.
-        private void FurnitureButton_Click(object sender, RoutedEventArgs e)
+        /*private void TriggerTile_CancelAssignment(object sender, PointerRoutedEventArgs e)
         {
-            Button clickedButton = (Button)sender;
-            int row = (int)clickedButton.GetValue(Grid.RowProperty);
+            if (toBeAssignedTriggerPoint != null)
+            {
+                // Reset thumbnail
+                Image tileThumbnail = toBeAssignedTriggerTile.Children[0] as Image;
+                tileThumbnail.Source = new Windows.UI.Xaml.Media.Imaging.BitmapImage(new Uri("ms-appx:///Assets/not_set.png"));
 
-            
-        }
+                // Reset background (white)
+                toBeAssignedTriggerTile.Background = new SolidColorBrush { Color = Color.FromArgb(255, 255, 255, 255) };
+            }
+        }*/
 
         /**************************************
             Dynamic UI initialization methods
@@ -258,7 +327,7 @@ namespace TheLivingRoom
                     TextBlock tileTriggerLabel = tileTriggerLabelGrid.Children[0] as TextBlock;
                     tileTriggerLabel.Text = "Trigger " + (j + 1);
 
-                    // Handle PointerPressed events from all Trigger tiles
+                    // Handle PointerPressed events from all TriggerTiles (assignment)
                     triggerTile.PointerPressed += TriggerTile_PointerPressed;
 
                     triggerTile.SetValue(Grid.ColumnProperty, (j + 1));
@@ -287,6 +356,7 @@ namespace TheLivingRoom
             tileGrid.Margin = new Thickness(10, 10, 10, 10);
             tileGrid.Background = new SolidColorBrush { Color = Color.FromArgb(255, 255, 255, 255) };
             tileGrid.IsTapEnabled = true;
+            tileGrid.IsDoubleTapEnabled = true;
 
             // Add image to 0th row of tile
             Image image = new Image

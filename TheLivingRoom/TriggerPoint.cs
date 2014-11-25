@@ -18,6 +18,10 @@ namespace TheLivingRoom
             TriggerSound = newSound;
         }
 
+        public void Set(Sound newSound) {
+            TriggerSound = newSound;
+        }
+
         public bool IsSet()
         {
             return (TriggerSound != null);

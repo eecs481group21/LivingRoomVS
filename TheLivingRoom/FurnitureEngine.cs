@@ -63,6 +63,15 @@ namespace TheLivingRoom
             return _furniture.Count > 0 ? _furniture : null;
         }
 
+        public Furniture GetFurnitureAtIndex(int index)
+        {
+            if (index < _furniture.Count)
+            {
+                return _furniture[index];
+            }
+            return null;
+        }
+
         public bool ChangeSoundPack(int newIndex)
         {
             if (newIndex < _soundPacks.Count)
