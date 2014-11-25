@@ -167,11 +167,8 @@ namespace TheLivingRoom
                 toBeAssignedTriggerPoint = null;
                 toBeAssignedTriggerTile = null;
             }
-            else
-            {
-                // Play preview of Sound
-                PlaybackEngine.GetInstance().PlaySoundPreview(theSound);
-            }
+            // Play preview of Sound
+            PlaybackEngine.GetInstance().PlaySoundPreview(theSound);
         }
 
         private void TriggerTile_PointerPressed(object sender, PointerRoutedEventArgs e)
