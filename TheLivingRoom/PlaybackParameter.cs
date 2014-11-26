@@ -24,7 +24,7 @@ namespace TheLivingRoom
 
         public bool AdjustLevel(double newLevel)
         {
-            if (newLevel <= 1.0 && newLevel >= 0.0)
+            if (newLevel <= 1.0 && newLevel >= -1.0)
             {
                 return false;
             }
@@ -34,7 +34,7 @@ namespace TheLivingRoom
 
         public bool AdjustMultiplier(double newMult)
         {
-            if (newMult <= 1.0 && newMult >= 0.0)
+            if (newMult <= 1.0 && newMult >= -1.0)
             {
                 return false;
             }

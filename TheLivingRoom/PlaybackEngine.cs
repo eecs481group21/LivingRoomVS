@@ -119,13 +119,20 @@ namespace TheLivingRoom
             return playbackVolume;
         }
 
-        private void FetchLatestParameterValues()
+        private double GetDistanceMultiplier(double distance)
+        {
+            return (distance - ZeroedDistance) / ZeroedDistance;
+        }
+
+        private async void FetchLatestParameterValues()
         {
             // _parameters[0] is distance
-            // _parameters[0].AdjustLevel( new level here );
+            double distance = (double)await Client.GetInstance().HttpGetAsync("/api/kinect/distance");
+            _parameters[0].AdjustLevel(GetDistanceMultiplier(distance));
 
             // _parameters[1] is hand touch
-            // _parameters[1].AdjustLevel( new level here );
+            bool handContact = (bool)await Client.GetInstance().HttpGetAsync("/api/kinect/contact");
+            _parameters[1].AdjustLevel(handContact ? 0.5 : -0.5);
         }
 
         // Members
@@ -133,5 +140,7 @@ namespace TheLivingRoom
         private List<PlaybackParameter> _parameters;
 
         private double _systemVolumeLimit; // upper limit of playback volume
+
+        private const double ZeroedDistance = 6.0; // Feet of 'normal separation' apart
     }
 }

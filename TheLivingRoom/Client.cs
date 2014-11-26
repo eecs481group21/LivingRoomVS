@@ -12,10 +12,25 @@ namespace TheLivingRoom
     public class Client
     {
         private HttpWebRequest _request;
+        private static Client _instance;
 
-        public async Task<object> HttpGetAsync(string url)
+        private Client()
         {
-            _request = (HttpWebRequest)WebRequest.Create(url);
+        }
+
+        public static Client GetInstance()
+        {
+            if (_instance != null)
+            {
+                return _instance;
+            }
+            _instance = new Client();
+            return _instance;
+        }
+
+        public async Task<object> HttpGetAsync(string uri)
+        {
+            _request = (HttpWebRequest)WebRequest.Create("http://localhost:8080" + uri);
             _request.Proxy = null;
             _request.Method = "GET";
             // Set the ContentType property of the WebRequest
