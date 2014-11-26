@@ -8,8 +8,9 @@ namespace TheLivingRoom
 {
     class PlaybackParameter
     {
-        public PlaybackParameter()
+        public PlaybackParameter(string name)
         {
+            Name = name;
             IsOn = true;
             AdjustLevel(DefaultLevel);
             AdjustMultiplier(DefaultMultiplier);
@@ -56,12 +57,14 @@ namespace TheLivingRoom
         private const double DefaultMultiplier = 1.0;
 
         // Members
+        public string Name { get; private set; }
+
         // Absolute effect on system volume [-1.0, 1.0]
         public double Level { get; private set; }
 
         // Configuration level regarding effect on system volume [0.0, 1.0]
         public double Multiplier { get; private set; } 
 
-        private bool IsOn { get; set; }
+        public bool IsOn { get; private set; }
     }
 }

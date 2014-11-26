@@ -136,5 +136,103 @@ namespace TheLivingRoom
 
             return furnitureRow;
         }
+
+        public static Grid CreateParameterTile(int i)
+        {
+            Grid parameterTile = new Grid
+            {
+                HorizontalAlignment = HorizontalAlignment.Stretch,
+                VerticalAlignment = VerticalAlignment.Stretch,
+                Background = new SolidColorBrush { Color = Color.FromArgb(255, 199, 254, 255) }
+            };
+
+            // Give proper margins
+            const int fullMargin = 10;
+            const int halfMargin = 5;
+            if (i == 0)
+            {
+                parameterTile.Margin = new Thickness(fullMargin, fullMargin, fullMargin, halfMargin);
+            }
+            else if (i == 1)
+            {
+                parameterTile.Margin = new Thickness(fullMargin, halfMargin, fullMargin, halfMargin);
+            }
+            else if (i == 2)
+            {
+                parameterTile.Margin = new Thickness(fullMargin, halfMargin, fullMargin, halfMargin);
+            }
+            else
+            {
+                parameterTile.Margin = new Thickness(fullMargin, halfMargin, fullMargin, fullMargin);
+            }
+
+            // Set up columns and spacing
+            ColumnDefinition c1 = new ColumnDefinition();
+            ColumnDefinition c2 = new ColumnDefinition();
+            c1.Width = new GridLength(3, GridUnitType.Star);
+            c2.Width = new GridLength(1, GridUnitType.Star);
+            parameterTile.ColumnDefinitions.Add(c1);
+            parameterTile.ColumnDefinitions.Add(c2);
+
+            // Create Label / Slider on left side of Tile
+            Grid labelSliderGrid = new Grid()
+            {
+                HorizontalAlignment = HorizontalAlignment.Stretch,
+                VerticalAlignment = VerticalAlignment.Stretch,
+                Margin = new Thickness(10, 10, 10, 10)
+            };
+            RowDefinition r1 = new RowDefinition();
+            RowDefinition r2 = new RowDefinition();
+            r1.Height = new GridLength(1, GridUnitType.Star);
+            r2.Height = new GridLength(1, GridUnitType.Star);
+            labelSliderGrid.RowDefinitions.Add(r1);
+            labelSliderGrid.RowDefinitions.Add(r2);
+
+            // Add label at top
+            TextBlock tileLabel = new TextBlock
+            {
+                HorizontalAlignment = HorizontalAlignment.Stretch,
+                VerticalAlignment = VerticalAlignment.Stretch,
+                FontSize = 32.0
+            };
+
+            tileLabel.SetValue(Grid.RowProperty, 0);
+            labelSliderGrid.Children.Add(tileLabel);
+
+            // Add multiplier slider at bottom
+            Slider multiplierSlider = new Slider
+            {
+                HorizontalAlignment = HorizontalAlignment.Stretch,
+                VerticalAlignment = VerticalAlignment.Stretch,
+                Margin = new Thickness(20, 10, 20, 10),
+                Orientation = Orientation.Horizontal,
+                StepFrequency = 0.01,
+                SmallChange = 0.01,
+                LargeChange = 0.1,
+                Maximum = 1.0,
+                Minimum = 0.0,
+                Foreground = new SolidColorBrush { Color = Color.FromArgb(255, 0, 116, 255)}
+            };
+
+            multiplierSlider.SetValue(Grid.RowProperty, 1);
+            labelSliderGrid.Children.Add(multiplierSlider);
+
+            // Add label and slider to left column of parameterTile
+            labelSliderGrid.SetValue(Grid.ColumnProperty, 0);
+            parameterTile.Children.Add(labelSliderGrid);
+            
+            // Add toggle button
+            Button toggleButton = new Button
+            {
+                HorizontalAlignment = HorizontalAlignment.Stretch,
+                VerticalAlignment = VerticalAlignment.Stretch,
+                Margin = new Thickness(10, 10, 10, 10)
+            };
+
+            toggleButton.SetValue(Grid.ColumnProperty, 1);
+            parameterTile.Children.Add(toggleButton);
+
+            return parameterTile;
+        }
     }
 }

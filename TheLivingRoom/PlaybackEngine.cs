@@ -30,7 +30,7 @@ namespace TheLivingRoom
         private PlaybackEngine()
         {
             // Initialize members
-            _parameters = new List<PlaybackParameter>();
+            Parameters = new List<PlaybackParameter>();
             SystemVolumeLimit = 1.0;
 
             CreateDefaultParameters();
@@ -38,10 +38,10 @@ namespace TheLivingRoom
 
         private void CreateDefaultParameters()
         {
-            PlaybackParameter distanceVolume = new PlaybackParameter();
-            _parameters.Add(distanceVolume);
-            PlaybackParameter handTouch = new PlaybackParameter();
-            _parameters.Add(handTouch);
+            PlaybackParameter distanceVolume = new PlaybackParameter("Distance");
+            Parameters.Add(distanceVolume);
+            PlaybackParameter handTouch = new PlaybackParameter("Touching Hands");
+            Parameters.Add(handTouch);
         }
 
         // Interface
@@ -107,18 +107,32 @@ namespace TheLivingRoom
             // Set maximum volume adjustment factor per parameter such that
             // if all paramaters were set to 50 system would play at full limit
             // and if all parameters were set to -50 volume would be half limit.
-            double maxAdjustFactorPerParameter = (SystemVolumeLimit * .5) / _parameters.Count;
+            double maxAdjustFactorPerParameter = (SystemVolumeLimit * .5) / NumberParametersOn();
             
             FetchLatestParameterValues();
 
             // Adjust playbackVolume according to parameters
-            foreach (PlaybackParameter param in _parameters)
+            foreach (PlaybackParameter param in Parameters)
             {
-                playbackVolume += maxAdjustFactorPerParameter * param.Level * param.Multiplier;
-                Debug.WriteLine("Adding: " + maxAdjustFactorPerParameter + " * " + param.Level + " * " + param.Multiplier);
+                if (param.IsOn)
+                {
+                    playbackVolume += maxAdjustFactorPerParameter * param.Level * param.Multiplier;
+                    Debug.WriteLine("Adding: " + maxAdjustFactorPerParameter + " * " + param.Level + " * " + param.Multiplier);
+                }
             }
 
             return playbackVolume;
+        }
+
+        private int NumberParametersOn()
+        {
+            int count = 0;
+            foreach (PlaybackParameter param in Parameters) {
+                if (param.IsOn) {
+                    ++count;
+                }
+            }
+            return count;
         }
 
         private double GetDistanceMultiplier(double distance)
@@ -133,7 +147,7 @@ namespace TheLivingRoom
             if (distance != null)
             {
                 double distanceCast = Convert.ToDouble(distance);
-                _parameters[0].AdjustLevel(GetDistanceMultiplier(distanceCast));
+                Parameters[0].AdjustLevel(GetDistanceMultiplier(distanceCast));
                 Debug.WriteLine("Distance multiplyer: " + GetDistanceMultiplier(distanceCast));
             }
 
@@ -142,7 +156,7 @@ namespace TheLivingRoom
             if (handContact != null)
             {
                 bool handContactCast = Convert.ToBoolean((string)handContact);
-                _parameters[1].AdjustLevel(handContactCast ? 0.5 : -0.5);
+                Parameters[1].AdjustLevel(handContactCast ? 0.5 : -0.5);
                 Debug.WriteLine("Hand Multiplyer: " + (handContactCast ? 0.5 : -0.5));
             }
             
@@ -150,7 +164,7 @@ namespace TheLivingRoom
 
         // Members
 
-        private List<PlaybackParameter> _parameters;
+        public List<PlaybackParameter> Parameters { get; private set; }
 
         public double SystemVolumeLimit { get; private set; } // upper limit of playback volume
 

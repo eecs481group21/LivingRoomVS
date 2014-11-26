@@ -13,6 +13,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using Windows.UI;
 
 // The Basic Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234237
 
@@ -51,6 +52,8 @@ namespace TheLivingRoom
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += navigationHelper_LoadState;
             this.navigationHelper.SaveState += navigationHelper_SaveState;
+
+            RenderPlaybackParameters();
 
             RenderSoundPacks();
         }
@@ -108,8 +111,101 @@ namespace TheLivingRoom
         #endregion
 
         /**************************************
+                  Click Event Handlers
+         **************************************/
+
+        private void MultiplierSlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
+        {
+            Slider multiplierSlider = (Slider)sender;
+
+            // Get parameter number
+            Grid labelSliderGrid = multiplierSlider.Parent as Grid;
+            int parameterNumber = (int)labelSliderGrid.Parent.GetValue(Grid.RowProperty);
+
+            // Adjust multiplier of corresponding parameter
+            List<PlaybackParameter> parameters = PlaybackEngine.GetInstance().Parameters;
+            if (parameterNumber < parameters.Count)
+            {
+                parameters[parameterNumber].AdjustMultiplier(multiplierSlider.Value);
+            }
+        }
+
+        private void ToggleButton_Click(object sender, RoutedEventArgs e)
+        {
+            Button toggleButton = (Button)sender;
+
+            // Get parameter number
+            int parameterNumber = (int)toggleButton.Parent.GetValue(Grid.RowProperty);
+
+            // Toggle the state of the parameter
+            List<PlaybackParameter> parameters = PlaybackEngine.GetInstance().Parameters;
+            if (parameterNumber < parameters.Count)
+            {
+                parameters[parameterNumber].Toggle();
+
+                // Change button appearance accordingly
+                if (parameters[parameterNumber].IsOn)
+                {
+                    toggleButton.Content = "On";
+                    toggleButton.Background = new SolidColorBrush { Color = Color.FromArgb(255, 166, 255, 173) };
+                }
+                else
+                {
+                    toggleButton.Content = "Off";
+                    toggleButton.Background = new SolidColorBrush { Color = Color.FromArgb(255, 255, 166, 175) };
+                }
+            }
+        }
+
+        /**************************************
             Dynamic UI initialization methods
          **************************************/
+
+        private void RenderPlaybackParameters()
+        {
+            List<PlaybackParameter> parameters = PlaybackEngine.GetInstance().Parameters;
+
+            // Render at maximum four parameters
+            int numParams = Math.Min(4, parameters.Count);
+
+            for (int i = 0; i < numParams; ++i)
+            {
+                // Make a new ParameterTile
+                Grid parameterTile = GridUtility.CreateParameterTile(i);
+
+                // Change label to name of the parameter
+                Grid labelSliderGrid = parameterTile.Children[0] as Grid;
+                TextBlock parameterLabel = labelSliderGrid.Children[0] as TextBlock;
+                Slider multiplierSlider = labelSliderGrid.Children[1] as Slider;
+                parameterLabel.Text = parameters[i].Name;
+
+                // Set current slider value to current multiplier of parameter
+                multiplierSlider.Value = parameters[i].Multiplier;
+
+                // Set button state based on whether or not parameter is on
+                Button toggleButton = parameterTile.Children[1] as Button;
+                if (parameters[i].IsOn)
+                {
+                    toggleButton.Content = "On";
+                    toggleButton.Background = new SolidColorBrush { Color = Color.FromArgb(255, 166, 255, 173) };
+                }
+                else
+                {
+                    toggleButton.Content = "Off";
+                    toggleButton.Background = new SolidColorBrush { Color = Color.FromArgb(255, 255, 166, 175) };
+                }
+
+                // Handle ValueChanged event on the slider
+                multiplierSlider.ValueChanged += MultiplierSlider_ValueChanged;
+
+                // Handle Click event on the toggle button
+                toggleButton.Click += ToggleButton_Click;
+
+                // Add parameter tile to parameterGrid
+                parameterTile.SetValue(Grid.RowProperty, i);
+                parameterGrid.Children.Add(parameterTile);
+            }
+        }
 
         private void RenderSoundPacks()
         {
@@ -138,6 +234,7 @@ namespace TheLivingRoom
                 soundpackGrid.Children.Add(soundpackTile);
             }
         }
+
         private void volumeSlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
             if (volumeSlider != null)
