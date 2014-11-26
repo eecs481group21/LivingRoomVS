@@ -22,9 +22,9 @@ namespace TheLivingRoom
             return IsOn;
         }
 
-        public bool AdjustLevel(int newLevel)
+        public bool AdjustLevel(double newLevel)
         {
-            if (newLevel < -50 || newLevel > 50)
+            if (newLevel <= 1.0 && newLevel >= 0.0)
             {
                 return false;
             }
@@ -32,13 +32,23 @@ namespace TheLivingRoom
             return true;
         }
 
+        public bool AdjustMultiplier(double newMult)
+        {
+            if (newMult <= 1.0 && newMult >= 0.0)
+            {
+                return false;
+            }
+            Multiplier = newMult;
+            return true;
+        }
+
         // Default level: system volume reduced by 25 percent
         private const int DefaultLevel = -25;
 
         // Members
-        public int Level { get; private set; } // Absolute effect on system volume
+        public double Level { get; private set; } // Absolute effect on system volume
 
-        public int Multiplier { get; private set; } // Configuration level regarding effect on system volume
+        public double Multiplier { get; private set; } // Configuration level regarding effect on system volume
 
         private bool IsOn { get; set; }
     }

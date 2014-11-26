@@ -38,6 +38,8 @@ namespace TheLivingRoom
         {
             PlaybackParameter distanceVolume = new PlaybackParameter();
             _parameters.Add(distanceVolume);
+            PlaybackParameter handTouch = new PlaybackParameter();
+            _parameters.Add(handTouch);
         }
 
         // Interface
@@ -95,13 +97,15 @@ namespace TheLivingRoom
                 return _systemVolumeLimit;
             }
 
-            // Assume default, no parameter volume level is half max volume
-            double playbackVolume = _systemVolumeLimit / 2;
+            // Assume default, no parameter volume level is 3/4 max volume
+            double playbackVolume = _systemVolumeLimit * 0.75;
 
             // Set maximum volume adjustment factor per parameter such that
             // if all paramaters were set to 50 system would play at full limit
-            // and if all parameters were set to -50 volume would be zero.
-            double maxAdjustFactorPerParameter = playbackVolume / _parameters.Count;
+            // and if all parameters were set to -50 volume would be half limit.
+            double maxAdjustFactorPerParameter = (_systemVolumeLimit * .25) / _parameters.Count;
+
+            FetchLatestParameterValues();
 
             // Adjust playbackVolume according to parameters
             playbackVolume += _parameters
@@ -113,6 +117,15 @@ namespace TheLivingRoom
                 .Sum();
 
             return playbackVolume;
+        }
+
+        private void FetchLatestParameterValues()
+        {
+            // _parameters[0] is distance
+            // _parameters[0].AdjustLevel( new level here );
+
+            // _parameters[1] is hand touch
+            // _parameters[1].AdjustLevel( new level here );
         }
 
         // Members
