@@ -51,6 +51,8 @@ namespace TheLivingRoom
             this.navigationHelper = new NavigationHelper(this);
             this.navigationHelper.LoadState += navigationHelper_LoadState;
             this.navigationHelper.SaveState += navigationHelper_SaveState;
+
+            RenderSoundPacks();
         }
 
         /// <summary>
@@ -105,6 +107,37 @@ namespace TheLivingRoom
 
         #endregion
 
+        /**************************************
+            Dynamic UI initialization methods
+         **************************************/
+
+        private void RenderSoundPacks()
+        {
+            List<SoundPack> soundPacks = FurnitureEngine.GetInstance().SoundPacks;
+
+            // A maximum of 3 packs are displayed
+            int numPacks = Math.Min(3, soundPacks.Count);
+
+            for (int i = 0; i < numPacks; ++i)
+            {
+                // Create a Tile for this SoundPack
+                Grid soundpackTile = GridUtility.CreateEmptyTile();
+
+                // Set the SoundPack icon
+                Image soundpackImage = soundpackTile.Children[0] as Image;
+                string uriString = "ms-appx:///Assets/SoundPacks/" + soundPacks[i].Name + "/" + soundPacks[i].Name + ".png";
+                soundpackImage.Source = new Windows.UI.Xaml.Media.Imaging.BitmapImage(new Uri(uriString));
+
+                // Set the Tile tile
+                Grid soundpackTileLabelGrid = soundpackTile.Children[1] as Grid;
+                TextBlock soundpackLabel = soundpackTileLabelGrid.Children[0] as TextBlock;
+                soundpackLabel.Text = soundPacks[i].Name;
+
+                // Add tile to proper row in soundpackGrid
+                soundpackTile.SetValue(Grid.RowProperty, i);
+                soundpackGrid.Children.Add(soundpackTile);
+            }
+        }
         private void volumeSlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
             if (volumeSlider != null)

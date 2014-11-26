@@ -162,6 +162,7 @@
     <Content Include="Assets\SoundPacks\Default\Audio\trumpet.mp3" />
     <Content Include="Assets\SoundPacks\Default\Audio\violin.mp3" />
     <Content Include="Assets\SoundPacks\Default\Audio\xylophone.mp3" />
+    <Content Include="Assets\SoundPacks\Default\default.png" />
     <Content Include="Assets\SoundPacks\Default\Icons\cello.png" />
     <Content Include="Assets\SoundPacks\Default\Icons\drums.png" />
     <Content Include="Assets\SoundPacks\Default\Icons\flute.png" />

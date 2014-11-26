@@ -60,7 +60,14 @@
                     <RowDefinition Height="17*"/>
                 </Grid.RowDefinitions>
                 <TextBlock TextWrapping="Wrap" Text="Playback Parameters" Margin="20,10,10,5" FontSize="36" FontFamily="Segoe UI" Foreground="#FF323232"/>
-                <Grid x:Name="parameterGrid" Margin="10,5,10,10" Grid.Row="1"/>
+                <Grid x:Name="parameterGrid" Margin="10,5,10,10" Grid.Row="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                </Grid>
             </Grid>
             <Grid Grid.Column="2" Margin="10" Background="#FFE0E0E0">
                 <Grid.RowDefinitions>
@@ -68,7 +75,13 @@
                     <RowDefinition Height="17*"/>
                 </Grid.RowDefinitions>
                 <TextBlock TextWrapping="Wrap" Text="SoundPack" Margin="20,10,10,5" FontSize="36" FontFamily="Segoe UI" Foreground="#FF323232"/>
-                <Grid x:Name="soundpackGrid" Grid.Row="1" Margin="10,5,10,10"/>
+                <Grid x:Name="soundpackGrid" Grid.Row="1" Margin="10,5,10,10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                </Grid>
             </Grid>
             <Grid Grid.Column="4" Margin="10" Background="#FFE0E0E0">
                 <Grid.RowDefinitions>

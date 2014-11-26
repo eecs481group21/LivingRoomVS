@@ -27,7 +27,7 @@ namespace TheLivingRoom
         {
             _furniture = new List<Furniture>();
             _triggers = new Dictionary<Windows.System.VirtualKey, TriggerPoint>();
-            _soundPacks = new List<SoundPack>();
+            SoundPacks = new List<SoundPack>();
             _currentSoundPackIndex = -1;
 
             InitBetaDemo();
@@ -48,11 +48,11 @@ namespace TheLivingRoom
             }
         }
 
-        public SoundPack GetSoundPack()
+        public SoundPack GetCurrentSoundPack()
         {
-            if (_currentSoundPackIndex >= 0 && _currentSoundPackIndex < _soundPacks.Count) 
+            if (_currentSoundPackIndex >= 0 && _currentSoundPackIndex < SoundPacks.Count) 
             {
-                return _soundPacks[_currentSoundPackIndex];
+                return SoundPacks[_currentSoundPackIndex];
             }
 
             return null;
@@ -74,7 +74,7 @@ namespace TheLivingRoom
 
         public bool ChangeSoundPack(int newIndex)
         {
-            if (newIndex < _soundPacks.Count)
+            if (newIndex < SoundPacks.Count)
             {
                 _currentSoundPackIndex = newIndex;
                 return true;
@@ -130,7 +130,7 @@ namespace TheLivingRoom
             defaultPack.AddSound(flute);
 
             // Add to list of SoundPacks
-            _soundPacks.Add(defaultPack);
+            SoundPacks.Add(defaultPack);
         }
 
         private void CreateChair()
@@ -174,7 +174,7 @@ namespace TheLivingRoom
 
         private Dictionary<Windows.System.VirtualKey, TriggerPoint> _triggers;
 
-        private List<SoundPack> _soundPacks;
+        public List<SoundPack> SoundPacks { get; private set; }
 
         private int _currentSoundPackIndex;
     }

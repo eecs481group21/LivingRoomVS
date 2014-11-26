@@ -146,7 +146,7 @@ namespace TheLivingRoom
             int soundId = row * 3 + col;
 
             // Get Sound that corresponds with this cell
-            Sound theSound = FurnitureEngine.GetInstance().GetSoundPack().Sounds[soundId];
+            Sound theSound = FurnitureEngine.GetInstance().GetCurrentSoundPack().Sounds[soundId];
 
             // Check if a TriggerPoint is in the process of being assigned.
             // If so, assign the TriggerPoint.
@@ -252,7 +252,7 @@ namespace TheLivingRoom
         // Populate the soundGrid according to the current SoundPack
         private void RenderSounds()
         {
-            List<Sound> sounds = FurnitureEngine.GetInstance().GetSoundPack().Sounds;
+            List<Sound> sounds = FurnitureEngine.GetInstance().GetCurrentSoundPack().Sounds;
 
             // Grid holds maximum of 9 Sounds
             int numSoundButtons = Math.Min(sounds.Count, 9);
