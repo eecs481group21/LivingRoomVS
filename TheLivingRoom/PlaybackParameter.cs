@@ -27,20 +27,28 @@ namespace TheLivingRoom
         {
             if (newLevel <= 1.0 && newLevel >= -1.0)
             {
-                return false;
+                Level = newLevel;
+                return true;
             }
-            Level = newLevel;
-            return true;
+
+            if (newLevel < -1.00)
+            {
+                Level = -1.0;
+                return true;
+            }
+            
+            return false;            
         }
 
         public bool AdjustMultiplier(double newMult)
         {
             if (newMult <= 1.0 && newMult >= 0.0)
             {
-                return false;
+                Multiplier = newMult;
+                return true;
             }
-            Multiplier = newMult;
-            return true;
+
+            return false;
         }
 
         // Default level: system volume reduced by 25 percent
