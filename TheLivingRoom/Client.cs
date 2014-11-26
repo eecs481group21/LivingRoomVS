@@ -28,7 +28,7 @@ namespace TheLivingRoom
             return _instance;
         }
 
-        public async Task<object> HttpGetAsync(string uri)
+        public async Task<string> HttpGetAsync(string uri)
         {
             _request = (HttpWebRequest)WebRequest.Create("http://localhost:8080" + uri);
             _request.Proxy = null;
@@ -37,7 +37,8 @@ namespace TheLivingRoom
             _request.ContentType = "application/x-www-form-urlencoded";
 
             using (WebResponse response = await _request.GetResponseAsync())
-                return response;
+            using (StreamReader reader = new StreamReader(response.GetResponseStream()))
+                return reader.ReadToEnd();
         }
     }
 }

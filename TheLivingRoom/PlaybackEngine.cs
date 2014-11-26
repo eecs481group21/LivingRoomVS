@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -127,12 +128,23 @@ namespace TheLivingRoom
         private async void FetchLatestParameterValues()
         {
             // _parameters[0] is distance
-            double distance = (double)await Client.GetInstance().HttpGetAsync("/api/kinect/distance");
-            _parameters[0].AdjustLevel(GetDistanceMultiplier(distance));
+            string distance = await Client.GetInstance().HttpGetAsync("/api/kinect/distance");
+            if (distance != null)
+            {
+                double distanceCast = Convert.ToDouble(distance);
+                _parameters[0].AdjustLevel(GetDistanceMultiplier(distanceCast));
+                Debug.WriteLine("Distance multiplyer: " + GetDistanceMultiplier(distanceCast));
+            }
 
             // _parameters[1] is hand touch
-            bool handContact = (bool)await Client.GetInstance().HttpGetAsync("/api/kinect/contact");
-            _parameters[1].AdjustLevel(handContact ? 0.5 : -0.5);
+            string handContact = await Client.GetInstance().HttpGetAsync("/api/kinect/contact");
+            if (handContact != null)
+            {
+                bool handContactCast = Convert.ToBoolean((string)handContact);
+                _parameters[1].AdjustLevel(handContactCast ? 0.5 : -0.5);
+                Debug.WriteLine("Hand Multiplyer: " + (handContactCast ? 0.5 : -0.5));
+            }
+            
         }
 
         // Members
