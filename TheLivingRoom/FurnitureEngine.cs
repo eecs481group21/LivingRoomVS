@@ -90,6 +90,9 @@ namespace TheLivingRoom
 
             // Create chair with one TriggerPoint
             CreateChair();
+
+            // Create couch with two TriggerPoints
+            CreateCouch();
         }
 
         private void CreateDefaultSoundPack()
@@ -141,6 +144,21 @@ namespace TheLivingRoom
             // TriggerPoint Key must be hard-coded b/c corresponding key
             // is sent by Arduino application which is independent of this app
             AddTrigger(Windows.System.VirtualKey.A, chairSeat);
+        }
+
+        private void CreateCouch()
+        {
+            // Create a couch with two TriggerPoints
+            Furniture couch = new Furniture("Couch");
+            TriggerPoint couchSeatLeft = new TriggerPoint();
+            TriggerPoint couchSeatRight = new TriggerPoint();
+            couch.AddTriggerPoint(couchSeatLeft);
+            couch.AddTriggerPoint(couchSeatRight);
+            _furniture.Add(couch);
+            
+            // Add triggers
+            AddTrigger(Windows.System.VirtualKey.B, couchSeatLeft);
+            AddTrigger(Windows.System.VirtualKey.C, couchSeatRight);
         }
 
         private void AddTrigger(Windows.System.VirtualKey key, TriggerPoint triggerPoint)
