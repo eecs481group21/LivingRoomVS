@@ -29,7 +29,7 @@ namespace TheLivingRoom
         {
             // Initialize members
             _parameters = new List<PlaybackParameter>();
-            _systemVolumeLimit = 1.0;
+            SystemVolumeLimit = 1.0;
 
             CreateDefaultParameters();
         }
@@ -61,7 +61,7 @@ namespace TheLivingRoom
         {
             // Play Sound at full volume
             sound.ResetToBeginning();
-            sound.AdjustVolume(_systemVolumeLimit);
+            sound.AdjustVolume(SystemVolumeLimit);
             sound.Play();
         }
 
@@ -84,7 +84,7 @@ namespace TheLivingRoom
         {
             if (newVolume >= 0.0 && newVolume <= 1.0)
             {
-                _systemVolumeLimit = newVolume;
+                SystemVolumeLimit = newVolume;
                 return true;
             }
             return false;
@@ -92,18 +92,18 @@ namespace TheLivingRoom
 
         private double CalculatePlaybackVolume()
         {
-            if (_systemVolumeLimit == 0.0)
+            if (SystemVolumeLimit == 0.0)
             {
-                return _systemVolumeLimit;
+                return SystemVolumeLimit;
             }
 
             // Assume default, no parameter volume level is 3/4 max volume
-            double playbackVolume = _systemVolumeLimit * 0.75;
+            double playbackVolume = SystemVolumeLimit * 0.75;
 
             // Set maximum volume adjustment factor per parameter such that
             // if all paramaters were set to 50 system would play at full limit
             // and if all parameters were set to -50 volume would be half limit.
-            double maxAdjustFactorPerParameter = (_systemVolumeLimit * .25) / _parameters.Count;
+            double maxAdjustFactorPerParameter = (SystemVolumeLimit * .25) / _parameters.Count;
 
             FetchLatestParameterValues();
 
@@ -139,7 +139,7 @@ namespace TheLivingRoom
 
         private List<PlaybackParameter> _parameters;
 
-        private double _systemVolumeLimit; // upper limit of playback volume
+        public double SystemVolumeLimit { get; private set; } // upper limit of playback volume
 
         private const double ZeroedDistance = 6.0; // Feet of 'normal separation' apart
     }
