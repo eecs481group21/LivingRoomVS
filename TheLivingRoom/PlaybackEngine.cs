@@ -98,7 +98,7 @@ namespace TheLivingRoom
                 return SystemVolumeLimit;
             }
 
-            // Assume default, no parameter volume level is 3/4 max volume
+            // Assume default, no parameter volume level is 3/ volume limit
             double playbackVolume = SystemVolumeLimit * 0.75;
 
             // Set maximum volume adjustment factor per parameter such that
@@ -109,13 +109,10 @@ namespace TheLivingRoom
             FetchLatestParameterValues();
 
             // Adjust playbackVolume according to parameters
-            playbackVolume += _parameters
-                // Parameter adjustment factor is the ratio multiplied by the max factor per parameter
-                .Select(param => param.Level/50.0)
-                // Note that this also accounts for negative adjustments properly
-                .Select(paramAdjustmentRatio => paramAdjustmentRatio * maxAdjustFactorPerParameter)
-                // Adjust playback volume according to the level of this parameter
-                .Sum();
+            foreach (PlaybackParameter param in _parameters)
+            {
+                playbackVolume += maxAdjustFactorPerParameter * param.Level * param.Multiplier;
+            }
 
             return playbackVolume;
         }

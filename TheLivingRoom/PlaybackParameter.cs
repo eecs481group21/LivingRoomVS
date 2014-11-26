@@ -12,6 +12,7 @@ namespace TheLivingRoom
         {
             IsOn = true;
             AdjustLevel(DefaultLevel);
+            AdjustMultiplier(DefaultMultiplier);
         }
 
         public bool Toggle()
@@ -34,7 +35,7 @@ namespace TheLivingRoom
 
         public bool AdjustMultiplier(double newMult)
         {
-            if (newMult <= 1.0 && newMult >= -1.0)
+            if (newMult <= 1.0 && newMult >= 0.0)
             {
                 return false;
             }
@@ -43,12 +44,15 @@ namespace TheLivingRoom
         }
 
         // Default level: system volume reduced by 25 percent
-        private const int DefaultLevel = -25;
+        private const double DefaultLevel = -0.25;
+        private const double DefaultMultiplier = 1.0;
 
         // Members
-        public double Level { get; private set; } // Absolute effect on system volume
+        // Absolute effect on system volume [-1.0, 1.0]
+        public double Level { get; private set; }
 
-        public double Multiplier { get; private set; } // Configuration level regarding effect on system volume
+        // Configuration level regarding effect on system volume [0.0, 1.0]
+        public double Multiplier { get; private set; } 
 
         private bool IsOn { get; set; }
     }

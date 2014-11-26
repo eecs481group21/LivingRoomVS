@@ -75,6 +75,7 @@ namespace TheLivingRoom
 
             // Set layout image
             Image layoutImage = furnitureLayoutTile.Children[0] as Image;
+            layoutImage.Stretch = Stretch.Uniform;
             string layoutImageUriString = "ms-appx:///Assets/" + name.ToLower() + ".png";
             layoutImage.Source = new Windows.UI.Xaml.Media.Imaging.BitmapImage(new Uri(layoutImageUriString));
 
