@@ -13,9 +13,7 @@ namespace TheLivingRoom_Kinect
 
         private KinectSensor _sensor;
         private MotionTracker _motionTracker;
-
-        private const double TouchTolerance = 0.4;
-
+        private static Kinect _instance;
 
         public int FramePixelDataLength
         {
@@ -35,6 +33,26 @@ namespace TheLivingRoom_Kinect
             set { _sensor.AllFramesReady += value; }
         }
 
+        public static Kinect GetInstance()
+        {
+            if (_instance == null)
+            {
+                _instance = new Kinect();
+                if (!_instance.InitKinect())
+                {
+                    // No Kinect found
+                    return null;
+                }
+            }
+
+            return _instance;
+        }
+
+        // Prevent construction outside of GetInstance()
+        private Kinect()
+        {
+        }
+
         /*****************************************************************
          * Function: InitKinect
          * Description: Initializes the Kinect to begin recieving input.
@@ -42,7 +60,8 @@ namespace TheLivingRoom_Kinect
          * after the kinect has been stopped.
          * Parameters: None
         ******************************************************************/
-        public bool InitKinect()
+
+        private bool InitKinect()
         {
             // Make sure a Kinect is connected before assigning it
             if (KinectSensor.KinectSensors.Count > 0)
@@ -54,6 +73,12 @@ namespace TheLivingRoom_Kinect
                 return false;
             }
 
+            StartKinect();
+            return true;
+        }
+
+        public void StartKinect() 
+        {
             _sensor.Start();
             // Get color image data from the Kinect
             _sensor.ColorStream.Enable();
@@ -67,8 +92,6 @@ namespace TheLivingRoom_Kinect
             _sensor.SkeletonStream.EnableTrackingInNearRange = false;
 
             _motionTracker = new MotionTracker();
-
-            return true;
         }
 
         /*****************************************************************
@@ -110,22 +133,47 @@ namespace TheLivingRoom_Kinect
             _motionTracker.LogDist(deltaDist);
         }
 
+        /*****************************************************************
+         * Function: LogContact
+         * Description: Use the Motion Tracker class to log the data
+         * Parameters: 
+         *      DepthImagePoint a, b: DepthImageFrames recieved from the 
+        *                             Kinect. The internal data should 
+        *                             not be manipulated in any way.
+        *****************************************************************/
+        public void LogContact(DepthImagePoint a, DepthImagePoint b)
+        {
+            _motionTracker.LogContact(a, b);
+        }
+
         public double GetDistChangeRatio()
         {
             return _motionTracker.GradeInterpersonalMovement();
         }
 
+        public bool GetPastHandContact()
+        {
+            return _motionTracker.GradeHandContact();
+        }
+
+        public double GetLastDistance()
+        {
+            return _motionTracker.GetLastDistance();
+        }
 
         internal class MotionTracker
         {
             private readonly FixedLengthQueue<double> _pastDistances;
-            private const int Fps = 30;
+            private readonly FixedLengthQueue<bool> _pastContact;
+            private const int Fps = 30; // Frames per second
             private const double CaptureWindow = 0.5; // In seconds
-            private const double AvgHumanFps = 7;
+            private const double AvgHumanFps = 7; // Average human feet per second
+            private const double TouchTolerance = 0.6; // In feet            
 
             public MotionTracker()
             {
                 _pastDistances = new FixedLengthQueue<double>((int)(Fps * CaptureWindow));
+                _pastContact = new FixedLengthQueue<bool>((int)(Fps * CaptureWindow));
             }
 
             /*****************************************************************
@@ -241,18 +289,19 @@ namespace TheLivingRoom_Kinect
             }
 
             /*****************************************************************
-             * Function: IsMakingHandContact
-             * Description: Given two points in space (assumed to be points 
-             *              corresponding to users' hands, we will determine 
-             *              whether or not the users are touching hands
+             * Function: LogContact
+             * Description: Log a value of the current contact in the 
+             *              list of the previous Fps*CaptureWindow instances
              * Parameters: 
              *      DepthImagePoint a, b: DepthImageFrames recieved from the 
              *                            Kinect. The internal data should 
-             *                            not be manipulated in any way.
+             *                            not be manipulated in any way. These 
+             *                            values represent the hands of users.
             *****************************************************************/
-            private bool IsMakingHandContact(DepthImagePoint a, DepthImagePoint b)
+            public void LogContact(DepthImagePoint a, DepthImagePoint b)
             {
-                return GetDistance(a, b) < TouchTolerance;
+                bool contact =  GetDistance(a, b)/12.0 < TouchTolerance;
+                _pastContact.Enqueue(contact);
             }
 
             /*****************************************************************
@@ -284,6 +333,25 @@ namespace TheLivingRoom_Kinect
                     return -1.0;
                 }
                 return distanceMoved / AvgHumanFps;
+            }
+
+            /*****************************************************************
+             * Function: GradeHandContact
+             * Description: Will return a bool that will correspond to if the
+             *              users have made hand contact in the last captureWindow 
+             * Parameters: 
+             *      DepthImagePoint a, b: DepthImageFrames recieved from the 
+             *                            Kinect. The internal data should 
+             *                            not be manipulated in any way.
+            *****************************************************************/
+            public bool GradeHandContact()
+            {
+                return _pastContact.Contains(true);
+            }
+
+            public double GetLastDistance()
+            {
+                return _pastDistances.LastOrDefault();
             }
         }
     }

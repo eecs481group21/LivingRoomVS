@@ -171,11 +171,10 @@ namespace TheLivingRoom
 
                 // Clear to-be-assigned helpers
                 toBeAssignedTriggerPoint = null;
-                toBeAssignedTriggerTile = null;                
+                toBeAssignedTriggerTile = null;
             }
-
             // Play preview of Sound
-            PlaybackEngine.GetInstance().PlaySoundPreview(theSound);            
+            PlaybackEngine.GetInstance().PlaySoundPreview(theSound);
         }
 
         private void TriggerTile_PointerPressed(object sender, PointerRoutedEventArgs e)

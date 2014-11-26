@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Net;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -22,8 +24,8 @@ namespace TheLivingRoom_Kinect
     /// </summary>
     public partial class MainWindow : Window
     {
-        private readonly Kinect _kinect;
-        private Shape _lastHead = null;
+        //private readonly Kinect _kinect;
+        //private Shape _lastHead = null;
         private Shape _lastHand;
         private Shape _lastLine;
         private Shape _lastHand2;
@@ -31,7 +33,10 @@ namespace TheLivingRoom_Kinect
         public MainWindow()
         {
             InitializeComponent();
-            _kinect = new Kinect();
+            Kinect.GetInstance();
+            Thread t = new Thread(Server.CreateHttpServer);
+            t.Start();
+            //Server.CreateHttpServer();
         }
 
         /*****************************************************************
@@ -57,12 +62,13 @@ namespace TheLivingRoom_Kinect
         {
             if (btnStart.Content.ToString() == "Start")
             {
-                if (_kinect.InitKinect())
+                if (Kinect.GetInstance() != null)
                 {
+                    Kinect.GetInstance().StartKinect();
                     btnStart.Content = "Stop";
                     textBlockError.Text = "";
                     // Function to be called when the Kinect is ready to work
-                    _kinect.AllFramesReady += _sensor_AllFramesReady;
+                    Kinect.GetInstance().AllFramesReady += _sensor_AllFramesReady;
                 }
                 else
                 {
@@ -71,7 +77,7 @@ namespace TheLivingRoom_Kinect
             }
             else
             {
-                _kinect.StopKinect();
+                Kinect.GetInstance().StopKinect();
                 btnStart.Content = "Start";
             }
         }
@@ -110,7 +116,7 @@ namespace TheLivingRoom_Kinect
                 //var headPosition1 = skeleton1.Joints[JointType.Head].Position;
                 var rightHandPosition1 = skeleton1.Joints[JointType.HandRight].Position;
                 var leftHandPosition1 = skeleton1.Joints[JointType.HandLeft].Position;
-                var mapper = new CoordinateMapper(_kinect.Sensor);
+                var mapper = new CoordinateMapper(Kinect.GetInstance().Sensor);
 
                 //var colorPointHead1 = mapper.MapSkeletonPointToColorPoint(headPosition1,
                 //ColorImageFormat.RgbResolution640x480Fps30);
@@ -126,8 +132,10 @@ namespace TheLivingRoom_Kinect
                 var depthPointHand2 = mapper.MapSkeletonPointToDepthPoint(leftHandPosition1,
                     DepthImageFormat.Resolution640x480Fps30);
 
-                double deltaDist = _kinect.GetDistance(depthPointHand1, depthPointHand2) / 12.0;
-                _kinect.LogDist(deltaDist);
+                double deltaDist = Kinect.GetInstance().GetDistance(depthPointHand1, depthPointHand2) / 12.0;
+                Kinect.GetInstance().LogDist(deltaDist);
+                // These are the same as above for the demo. Will be replaced to only correspond with hands in production
+                Kinect.GetInstance().LogContact(depthPointHand1, depthPointHand2);
                 textBlockDistInches.Text = Math.Round(deltaDist, 4).ToString(CultureInfo.InvariantCulture);
 
                 //canvasFeed.Children.Remove(lastHead);
