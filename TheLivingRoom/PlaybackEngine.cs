@@ -29,7 +29,7 @@ namespace TheLivingRoom
         {
             // Initialize members
             _parameters = new List<PlaybackParameter>();
-            _systemVolumeLimit = 0.7;
+            _systemVolumeLimit = 1.0;
 
             CreateDefaultParameters();
         }

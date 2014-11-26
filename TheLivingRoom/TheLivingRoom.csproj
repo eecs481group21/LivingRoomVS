@@ -122,6 +122,7 @@
     <Compile Include="Common\SuspensionManager.cs" />
     <Compile Include="Furniture.cs" />
     <Compile Include="FurnitureEngine.cs" />
+    <Compile Include="GridUtility.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
