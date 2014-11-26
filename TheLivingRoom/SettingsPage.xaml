@@ -46,5 +46,38 @@
             <TextBlock x:Name="pageTitle" Text="{StaticResource AppName}" Style="{StaticResource HeaderTextBlockStyle}" Grid.Column="1" 
                         IsHitTestVisible="false" TextWrapping="NoWrap" VerticalAlignment="Bottom" Margin="0,0,30,40"/>
         </Grid>
+        <Grid x:Name="settingsGrid" Grid.Row="1" Margin="50">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="6*"/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
+            <Grid Background="#FFE0E0E0" Margin="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="3*"/>
+                    <RowDefinition Height="17*"/>
+                </Grid.RowDefinitions>
+                <TextBlock TextWrapping="Wrap" Text="Playback Parameters" Margin="20,10,10,5" FontSize="36" FontFamily="Segoe UI" Foreground="#FF323232"/>
+                <Grid x:Name="parameterGrid" Margin="10,5,10,10" Grid.Row="1"/>
+            </Grid>
+            <Grid Grid.Column="2" Margin="10" Background="#FFE0E0E0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="3*"/>
+                    <RowDefinition Height="17*"/>
+                </Grid.RowDefinitions>
+                <TextBlock TextWrapping="Wrap" Text="SoundPack" Margin="20,10,10,5" FontSize="36" FontFamily="Segoe UI" Foreground="#FF323232"/>
+                <Grid x:Name="soundpackGrid" Grid.Row="1" Margin="10,5,10,10"/>
+            </Grid>
+            <Grid Grid.Column="4" Margin="10" Background="#FFE0E0E0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="3*"/>
+                    <RowDefinition Height="17*"/>
+                </Grid.RowDefinitions>
+                <TextBlock TextWrapping="Wrap" Text="Volume" Margin="20,10,10,5" FontSize="36" FontFamily="Segoe UI" Foreground="#FF323232"/>
+                <Slider x:Name="volumeSlider" Grid.Row="1" Orientation="Vertical" Margin="60,25,60,80" Foreground="#FF0074FF" LargeChange="0.1" Maximum="1" SmallChange="0.01" StepFrequency="0.01" Value="0.9" TickPlacement="None" HorizontalAlignment="Center"/>
+            </Grid>
+        </Grid>
     </Grid>
 </Page>
