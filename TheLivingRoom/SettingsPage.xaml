@@ -76,7 +76,7 @@
                     <RowDefinition Height="17*"/>
                 </Grid.RowDefinitions>
                 <TextBlock TextWrapping="Wrap" Text="Volume" Margin="20,10,10,5" FontSize="36" FontFamily="Segoe UI" Foreground="#FF323232"/>
-                <Slider x:Name="volumeSlider" Grid.Row="1" Orientation="Vertical" Margin="60,25,60,80" Foreground="#FF0074FF" LargeChange="0.1" Maximum="1" SmallChange="0.01" StepFrequency="0.01" Value="0.9" TickPlacement="None" HorizontalAlignment="Center"/>
+                <Slider x:Name="volumeSlider" Grid.Row="1" Orientation="Vertical" Margin="60,25,60,80" Foreground="#FF0074FF" LargeChange="0.1" Maximum="1" SmallChange="0.01" StepFrequency="0.01" Value="0.9" TickPlacement="None" HorizontalAlignment="Center" ValueChanged="volumeSlider_ValueChanged"/>
             </Grid>
         </Grid>
     </Grid>

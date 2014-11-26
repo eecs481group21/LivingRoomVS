@@ -66,6 +66,8 @@ namespace TheLivingRoom
         /// session. The state will be null the first time a page is visited.</param>
         private void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
+            // Set slider value to current system volume limit
+            volumeSlider.Value = PlaybackEngine.GetInstance().SystemVolumeLimit;
         }
 
         /// <summary>
@@ -102,5 +104,14 @@ namespace TheLivingRoom
         }
 
         #endregion
+
+        private void volumeSlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
+        {
+            if (volumeSlider != null)
+            {
+                // Change system volume limit in PlaybackEngine
+                PlaybackEngine.GetInstance().SetVolumeLimit(volumeSlider.Value);
+            }
+        }
     }
 }
