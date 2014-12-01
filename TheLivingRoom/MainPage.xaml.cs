@@ -133,6 +133,7 @@ namespace TheLivingRoom
         // Handle transition to Settings page
         private void settingsButton_Click(object sender, RoutedEventArgs e)
         {
+            FurnitureEngine.GetInstance().ClearTriggers();
             this.Frame.Navigate(typeof(SettingsPage));
         }
 
