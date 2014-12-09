@@ -169,6 +169,14 @@ namespace TheLivingRoom
             }
         }
 
+        public void ClearTriggers()
+        {
+            foreach (KeyValuePair<Windows.System.VirtualKey, TriggerPoint> trigger in _triggers)
+            {
+                trigger.Value.Clear();
+            }
+        }
+
         // Members
         private List<Furniture> _furniture;
 
