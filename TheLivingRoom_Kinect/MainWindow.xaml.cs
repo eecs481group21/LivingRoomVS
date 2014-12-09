@@ -29,6 +29,8 @@ namespace TheLivingRoom_Kinect
         private Shape _lastHand;
         private Shape _lastLine;
         private Shape _lastHand2;
+        private const int NumRequiredSkeletons = 2;
+        private const bool SingleUserDebug = false;
 
         public MainWindow()
         {
@@ -36,7 +38,6 @@ namespace TheLivingRoom_Kinect
             Kinect.GetInstance();
             Thread t = new Thread(Server.CreateHttpServer);
             t.Start();
-            //Server.CreateHttpServer();
         }
 
         /*****************************************************************
@@ -107,29 +108,49 @@ namespace TheLivingRoom_Kinect
                 }
                 var skeletons = new Skeleton[frame.SkeletonArrayLength];
                 frame.CopySkeletonDataTo(skeletons);
+
+                int firstId;
+                
                 var skeleton1 = skeletons.FirstOrDefault(s => s.TrackingState == SkeletonTrackingState.Tracked);
                 if (skeleton1 == null)
                 {
                     return;
                 }
+                else if (!SingleUserDebug)
+                {
+                    firstId = skeleton1.TrackingId;
+                }
+
+                Skeleton skeleton2 = null;
+                if (!SingleUserDebug)
+                {
+                    skeleton2 = skeletons.FirstOrDefault(s => s.TrackingId != firstId && s.TrackingState == SkeletonTrackingState.Tracked);
+                    if (skeleton2 == null)
+                    {
+                        return;
+                    }
+                }
+
                 // Skeletal coordinates
-                //var headPosition1 = skeleton1.Joints[JointType.Head].Position;
-                var rightHandPosition1 = skeleton1.Joints[JointType.HandRight].Position;
-                var leftHandPosition1 = skeleton1.Joints[JointType.HandLeft].Position;
+                var skeleton1Position = (SingleUserDebug) ? skeleton1.Joints[JointType.HandLeft].Position :
+                                                            skeleton1.Joints[JointType.Spine].Position;
+                var skeleton2Position = (SingleUserDebug) ? skeleton1.Joints[JointType.HandRight].Position : 
+                                                            skeleton2.Joints[JointType.Spine].Position;
+
                 var mapper = new CoordinateMapper(Kinect.GetInstance().Sensor);
 
                 //var colorPointHead1 = mapper.MapSkeletonPointToColorPoint(headPosition1,
                 //ColorImageFormat.RgbResolution640x480Fps30);
-                var colorPointHand1 = mapper.MapSkeletonPointToColorPoint(rightHandPosition1,
+                var colorPointHand1 = mapper.MapSkeletonPointToColorPoint(skeleton1Position,
                    ColorImageFormat.RgbResolution640x480Fps30);
-                var colorPointHand2 = mapper.MapSkeletonPointToColorPoint(leftHandPosition1,
+                var colorPointHand2 = mapper.MapSkeletonPointToColorPoint(skeleton2Position,
                    ColorImageFormat.RgbResolution640x480Fps30);
 
                 //var depthPointHead1 = mapper.MapSkeletonPointToDepthPoint(headPosition1,
                 //DepthImageFormat.Resolution640x480Fps30);
-                var depthPointHand1 = mapper.MapSkeletonPointToDepthPoint(rightHandPosition1,
+                var depthPointHand1 = mapper.MapSkeletonPointToDepthPoint(skeleton1Position,
                     DepthImageFormat.Resolution640x480Fps30);
-                var depthPointHand2 = mapper.MapSkeletonPointToDepthPoint(leftHandPosition1,
+                var depthPointHand2 = mapper.MapSkeletonPointToDepthPoint(skeleton2Position,
                     DepthImageFormat.Resolution640x480Fps30);
 
                 double deltaDist = Kinect.GetInstance().GetDistance(depthPointHand1, depthPointHand2) / 12.0;
