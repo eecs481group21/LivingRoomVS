@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Windows.Storage;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Media;
 
 namespace TheLivingRoom
@@ -66,7 +67,7 @@ namespace TheLivingRoom
             // Play Sound at full volume
             sound.ResetToBeginning();
             sound.AdjustVolume(SystemVolumeLimit);
-            sound.Play();
+            sound.PlayPreview();
         }
 
         public void StopPlayback()

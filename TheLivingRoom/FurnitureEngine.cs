@@ -98,36 +98,36 @@ namespace TheLivingRoom
         private void CreateDefaultSoundPack()
         {
             // Create Sounds associated with Default SoundPack
-            Sound piano = new Sound("Piano");
-            piano.InitWithSource("ms-appx:///Assets/SoundPacks/Default/Audio/piano.mp3");
-            Sound violin = new Sound("Violin");
-            violin.InitWithSource("ms-appx:///Assets/SoundPacks/Default/Audio/violin.mp3");
-            Sound trumpet = new Sound("Trumpet");
-            trumpet.InitWithSource("ms-appx:///Assets/SoundPacks/Default/Audio/trumpet.mp3");
-            Sound guitar = new Sound("Guitar");
-            guitar.InitWithSource("ms-appx:///Assets/SoundPacks/Default/Audio/guitar.mp3");
+            Sound bells = new Sound("Bells");
+            bells.InitWithSource("ms-appx:///Assets/SoundPacks/Garage/Audio/bells.mp3");
             Sound drums = new Sound("Drums");
-            drums.InitWithSource("ms-appx:///Assets/SoundPacks/Default/Audio/drums.mp3");
-            Sound cello = new Sound("Cello");
-            cello.InitWithSource("ms-appx:///Assets/SoundPacks/Default/Audio/cello.mp3");
-            Sound xylophone = new Sound("Xylophone");
-            xylophone.InitWithSource("ms-appx:///Assets/SoundPacks/Default/Audio/xylophone.mp3");
+            drums.InitWithSource("ms-appx:///Assets/SoundPacks/Garage/Audio/drums.mp3");
+            Sound guitar = new Sound("Guitar");
+            guitar.InitWithSource("ms-appx:///Assets/SoundPacks/Garage/Audio/guitar.mp3");
+            Sound harmonica = new Sound("Harmonica");
+            harmonica.InitWithSource("ms-appx:///Assets/SoundPacks/Garage/Audio/harmonica.mp3");
+            Sound strings = new Sound("Strings");
+            strings.InitWithSource("ms-appx:///Assets/SoundPacks/Garage/Audio/strings.mp3");
+            Sound oboe = new Sound("Oboe");
+            oboe.InitWithSource("ms-appx:///Assets/SoundPacks/Garage/Audio/oboe.mp3");
+            Sound piano = new Sound("Piano");
+            piano.InitWithSource("ms-appx:///Assets/SoundPacks/Garage/Audio/piano.mp3");
             Sound sax = new Sound("Saxophone");
-            sax.InitWithSource("ms-appx:///Assets/SoundPacks/Default/Audio/sax.mp3");
-            Sound flute = new Sound("Flute");
-            flute.InitWithSource("ms-appx:///Assets/SoundPacks/Default/Audio/flute.mp3");
+            sax.InitWithSource("ms-appx:///Assets/SoundPacks/Garage/Audio/saxophone.mp3");
+            Sound horns = new Sound("Horns");
+            horns.InitWithSource("ms-appx:///Assets/SoundPacks/Garage/Audio/horns.mp3");
 
             // Add to Default
             SoundPack defaultPack = new SoundPack("Default");
-            defaultPack.AddSound(piano);
-            defaultPack.AddSound(violin);
-            defaultPack.AddSound(trumpet);
-            defaultPack.AddSound(guitar);
+            defaultPack.AddSound(bells);
             defaultPack.AddSound(drums);
-            defaultPack.AddSound(cello);
-            defaultPack.AddSound(xylophone);
+            defaultPack.AddSound(guitar);
+            defaultPack.AddSound(harmonica);
+            defaultPack.AddSound(strings);
+            defaultPack.AddSound(oboe);
+            defaultPack.AddSound(piano);
             defaultPack.AddSound(sax);
-            defaultPack.AddSound(flute);
+            defaultPack.AddSound(horns);
 
             // Add to list of SoundPacks
             SoundPacks.Add(defaultPack);

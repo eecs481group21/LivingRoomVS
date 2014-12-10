@@ -172,6 +172,27 @@
     <Content Include="Assets\SoundPacks\Default\Icons\trumpet.png" />
     <Content Include="Assets\SoundPacks\Default\Icons\violin.png" />
     <Content Include="Assets\SoundPacks\Default\Icons\xylophone.png" />
+    <Content Include="Assets\SoundPacks\Garage\Audio\bells.mp3" />
+    <Content Include="Assets\SoundPacks\Garage\Audio\drums.mp3" />
+    <Content Include="Assets\SoundPacks\Garage\Audio\guitar.mp3" />
+    <Content Include="Assets\SoundPacks\Garage\Audio\harmonica.mp3" />
+    <Content Include="Assets\SoundPacks\Garage\Audio\horns.mp3" />
+    <Content Include="Assets\SoundPacks\Garage\Audio\oboe.mp3" />
+    <Content Include="Assets\SoundPacks\Garage\Audio\piano.mp3" />
+    <Content Include="Assets\SoundPacks\Garage\Audio\saxophone.mp3" />
+    <Content Include="Assets\SoundPacks\Garage\Audio\shaker.mp3" />
+    <Content Include="Assets\SoundPacks\Garage\Audio\strings.mp3" />
+    <Content Include="Assets\SoundPacks\Garage\default.png" />
+    <Content Include="Assets\SoundPacks\Garage\Icons\bells.png" />
+    <Content Include="Assets\SoundPacks\Garage\Icons\drums.png" />
+    <Content Include="Assets\SoundPacks\Garage\Icons\guitar.png" />
+    <Content Include="Assets\SoundPacks\Garage\Icons\harmonica.png" />
+    <Content Include="Assets\SoundPacks\Garage\Icons\horns.png" />
+    <Content Include="Assets\SoundPacks\Garage\Icons\oboe.png" />
+    <Content Include="Assets\SoundPacks\Garage\Icons\piano.png" />
+    <Content Include="Assets\SoundPacks\Garage\Icons\saxophone.png" />
+    <Content Include="Assets\SoundPacks\Garage\Icons\shaker.png" />
+    <Content Include="Assets\SoundPacks\Garage\Icons\strings.png" />
     <Content Include="Assets\SplashScreen.scale-100.png" />
     <Content Include="Assets\StoreLogo.scale-100.png" />
   </ItemGroup>

@@ -265,7 +265,7 @@ namespace TheLivingRoom
 
                 // Set tile image to instrument icon
                 Image soundTileImage = soundTile.Children[0] as Image;
-                string uriString = "ms-appx:///Assets/SoundPacks/Default/Icons/" + sounds[i].Name.ToLower() + ".png";
+                string uriString = "ms-appx:///Assets/SoundPacks/Garage/Icons/" + sounds[i].Name.ToLower() + ".png";
                 soundTileImage.Source = new Windows.UI.Xaml.Media.Imaging.BitmapImage(new Uri(uriString));
 
                 // Set the tile label to the instrument name

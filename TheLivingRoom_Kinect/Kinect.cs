@@ -153,11 +153,19 @@ namespace TheLivingRoom_Kinect
 
         public bool GetPastHandContact()
         {
+            if (_motionTracker == null)
+            {
+                return false;
+            }
             return _motionTracker.GradeHandContact();
         }
 
         public double GetLastDistance()
         {
+            if (_motionTracker == null)
+            {
+                return 0;
+            }
             return _motionTracker.GetLastDistance();
         }
 
