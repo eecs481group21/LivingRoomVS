@@ -182,7 +182,7 @@
     <Content Include="Assets\SoundPacks\Garage\Audio\saxophone.mp3" />
     <Content Include="Assets\SoundPacks\Garage\Audio\shaker.mp3" />
     <Content Include="Assets\SoundPacks\Garage\Audio\strings.mp3" />
-    <Content Include="Assets\SoundPacks\Garage\default.png" />
+    <Content Include="Assets\SoundPacks\Garage\garage.png" />
     <Content Include="Assets\SoundPacks\Garage\Icons\bells.png" />
     <Content Include="Assets\SoundPacks\Garage\Icons\drums.png" />
     <Content Include="Assets\SoundPacks\Garage\Icons\guitar.png" />

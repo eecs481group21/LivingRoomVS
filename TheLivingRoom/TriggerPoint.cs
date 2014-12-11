@@ -11,11 +11,13 @@ namespace TheLivingRoom
         public TriggerPoint()
         {
             TriggerSound = null;
+            setID();
         }
 
         public TriggerPoint(Sound newSound)
         {
             TriggerSound = newSound;
+            setID();
         }
 
         public void Set(Sound newSound) {
@@ -33,6 +35,13 @@ namespace TheLivingRoom
             return true;
         }
 
+        private void setID()
+        {
+            ID = GetHashCode().ToString();
+        }
+
         public Sound TriggerSound { get; set; }
+
+        public String ID { get; private set; }
     }
 }

@@ -31,6 +31,7 @@ namespace TheLivingRoom
         // Used in assigning Sounds to TriggerPoints
         TriggerPoint toBeAssignedTriggerPoint;
         Grid toBeAssignedTriggerTile;
+        List<Grid> triggerTiles;
 
         /// <summary>
         /// This can be changed to a strongly typed view model.
@@ -57,6 +58,12 @@ namespace TheLivingRoom
             this.navigationHelper.LoadState += navigationHelper_LoadState;
             this.navigationHelper.SaveState += navigationHelper_SaveState;
 
+            // Set to-be-assigned helpers to null
+            toBeAssignedTriggerPoint = null;
+            toBeAssignedTriggerTile = null;
+
+            triggerTiles = new List<Grid>();
+
             // Listen to global KeyDown events
             Window.Current.CoreWindow.KeyDown += CoreWindow_KeyDown;
 
@@ -65,10 +72,6 @@ namespace TheLivingRoom
 
             // Get all of the furniture available
             RenderFurniture();
-
-            // Set to-be-assigned helpers to null
-            toBeAssignedTriggerPoint = null;
-            toBeAssignedTriggerTile = null;
         }
 
         private void CoreWindow_KeyDown(Windows.UI.Core.CoreWindow sender, Windows.UI.Core.KeyEventArgs args)
@@ -89,6 +92,40 @@ namespace TheLivingRoom
         /// session. The state will be null the first time a page is visited.</param>
         private void navigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
+            Debug.WriteLine("LoadState Called.");
+
+            // Check if any of the triggers are assigned and restore the tile
+            foreach (Grid triggerTile in triggerTiles)
+            {
+                // Look up if this trigger should be set with a Sound
+                String triggerID = triggerTile.Tag.ToString();
+                if (e.PageState != null && e.PageState.ContainsKey(triggerID))
+                {
+                    // Set the TriggerPoint and change its tile Icon
+                    TriggerPoint triggerPoint = FurnitureEngine.GetInstance().GetTriggerPointByID(triggerID);
+                    Sound sound = FurnitureEngine.GetInstance().GetSoundByName(e.PageState[triggerID].ToString());
+                    if (triggerPoint != null && sound != null)
+                    {
+                        // Set trigger point
+                        triggerPoint.Set(sound);
+
+                        // Set TriggerTile thumbnail to Sound icon
+                        Image triggerTileThumbnail = triggerTile.Children[0] as Image;
+                        string uriString = "ms-appx:///Assets/SoundPacks/Garage/Icons/" + sound.Name.ToLower() + ".png";
+                        triggerTileThumbnail.Source = new Windows.UI.Xaml.Media.Imaging.BitmapImage(new Uri(uriString));
+
+                        // Reset TriggerTile label to triggernumber
+                        int triggerNumber = (int)triggerTile.GetValue(Grid.ColumnProperty);
+                        Grid triggerTileLabelGrid = triggerTile.Children[1] as Grid;
+                        TextBlock triggerTileLabel = triggerTileLabelGrid.Children[0] as TextBlock;
+                        triggerTileLabel.Text = triggerNumber.ToString();
+
+                        // Change background color of TriggerTile to normal color (white)
+                        triggerTile.Background = new SolidColorBrush { Color = Color.FromArgb(255, 255, 255, 255) };
+                    }
+                }
+            }
+
         }
 
         /// <summary>
@@ -101,6 +138,16 @@ namespace TheLivingRoom
         /// serializable state.</param>
         private void navigationHelper_SaveState(object sender, SaveStateEventArgs e)
         {
+            Debug.WriteLine("SaveState Called.");
+
+            // Save state of each trigger
+            List<KeyValuePair<String, String>> stateOfTriggers = FurnitureEngine.GetInstance().GetStateOfTriggers();
+
+            foreach (KeyValuePair<String, String> statePair in stateOfTriggers)
+            {
+                Debug.WriteLine("Saving mapping " + statePair.Key + " to " + statePair.Value + ".");
+                e.PageState[statePair.Key] = statePair.Value;
+            }
         }
 
         #region NavigationHelper registration
@@ -133,8 +180,8 @@ namespace TheLivingRoom
         // Handle transition to Settings page
         private void settingsButton_Click(object sender, RoutedEventArgs e)
         {
-            FurnitureEngine.GetInstance().ClearTriggers();
             this.Frame.Navigate(typeof(SettingsPage));
+            FurnitureEngine.GetInstance().ClearTriggers();
         }
 
         // Play preview of Sound corresponding to this SoundTile
@@ -169,7 +216,7 @@ namespace TheLivingRoom
 
                 // Change background color of TriggerTile to normal color (white)
                 toBeAssignedTriggerTile.Background = new SolidColorBrush { Color = Color.FromArgb(255, 255, 255, 255) };
-
+                
                 // Clear to-be-assigned helpers
                 toBeAssignedTriggerPoint = null;
                 toBeAssignedTriggerTile = null;
@@ -327,6 +374,12 @@ namespace TheLivingRoom
 
                     triggerTile.SetValue(Grid.ColumnProperty, (j + 1));
                     curFurnitureRow.Children.Add(triggerTile);
+
+                    // Set tag of this tile to corresponding TriggerPoint's ID
+                    TriggerPoint triggerPoint = FurnitureEngine.GetInstance().GetFurnitureAtIndex(i).GetTriggerPointAtIndex(j);
+                    triggerTile.Tag = triggerPoint.ID;
+
+                    triggerTiles.Add(triggerTile);
                 }
 
                 // Add curFurnitureRow to furnitureGrid

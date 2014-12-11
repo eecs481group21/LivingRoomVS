@@ -39,7 +39,7 @@ namespace TheLivingRoom
         /// will be used such as when the application is launched to open a specific file.
         /// </summary>
         /// <param name="e">Details about the launch request and process.</param>
-        protected override void OnLaunched(LaunchActivatedEventArgs e)
+        protected async override void OnLaunched(LaunchActivatedEventArgs e)
         {
 
 #if DEBUG
@@ -57,6 +57,10 @@ namespace TheLivingRoom
             {
                 // Create a Frame to act as the navigation context and navigate to the first page
                 rootFrame = new Frame();
+
+                // Register the Frame to allow SessionManager to use it
+                TheLivingRoom.Common.SuspensionManager.RegisterFrame(rootFrame, "appFrame");
+
                 // Set the default language
                 rootFrame.Language = Windows.Globalization.ApplicationLanguages.Languages[0];
 
@@ -65,6 +69,7 @@ namespace TheLivingRoom
                 if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
                 {
                     //TODO: Load state from previously suspended application
+                    await TheLivingRoom.Common.SuspensionManager.RestoreAsync();
                 }
 
                 // Place the frame in the current Window
@@ -99,13 +104,12 @@ namespace TheLivingRoom
         /// </summary>
         /// <param name="sender">The source of the suspend request.</param>
         /// <param name="e">Details about the suspend request.</param>
-        private void OnSuspending(object sender, SuspendingEventArgs e)
+        private async void OnSuspending(object sender, SuspendingEventArgs e)
         {
             var deferral = e.SuspendingOperation.GetDeferral();
             //TODO: Save application state and stop any background activity
+            await TheLivingRoom.Common.SuspensionManager.SaveAsync();
             deferral.Complete();
         }
-
-        public string yoDawg { get; set; }
     }
 }
