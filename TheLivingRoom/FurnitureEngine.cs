@@ -58,6 +58,29 @@ namespace TheLivingRoom
             return null;
         }
 
+        public Sound GetSoundByName(String searchName)
+        {
+            foreach (Sound sound in SoundPacks[_currentSoundPackIndex].Sounds)
+            {
+                if (sound.Name.Equals(searchName))
+                {
+                    return sound;                  
+                }
+            }
+            return null;
+        }
+
+        public TriggerPoint GetTriggerPointByID(String searchID)
+        {
+            foreach (TriggerPoint triggerPoint in _triggers.Values) {
+                if (triggerPoint.ID.Equals(searchID))
+                {
+                    return triggerPoint;
+                }
+            }
+            return null;
+        }
+
         public List<Furniture> GetFurnitureItems()
         {
             return _furniture.Count > 0 ? _furniture : null;
@@ -118,7 +141,7 @@ namespace TheLivingRoom
             horns.InitWithSource("ms-appx:///Assets/SoundPacks/Garage/Audio/horns.mp3");
 
             // Add to Default
-            SoundPack defaultPack = new SoundPack("Default");
+            SoundPack defaultPack = new SoundPack("Garage");
             defaultPack.AddSound(bells);
             defaultPack.AddSound(drums);
             defaultPack.AddSound(guitar);
@@ -175,6 +198,22 @@ namespace TheLivingRoom
             {
                 trigger.Value.Clear();
             }
+        }
+
+        public List<KeyValuePair<String, String>> GetStateOfTriggers()
+        {
+            List<KeyValuePair<String, String>> state = new List<KeyValuePair<string, string>>();
+
+            foreach (TriggerPoint trigger in _triggers.Values)
+            {
+                if (trigger.TriggerSound != null)
+                {
+                    KeyValuePair<String, String> curState = new KeyValuePair<string, string>(trigger.ID, trigger.TriggerSound.Name);
+                    state.Add(curState);
+                }
+            }
+
+            return state;
         }
 
         // Members

@@ -52,7 +52,7 @@ namespace TheLivingRoom
             sound.ResetToBeginning();
 
             // Calculate current volume according to parameters and system volume limit
-            double vol = CalculatePlaybackVolume();
+            double vol = 1.0;
 
             Debug.WriteLine("Adjusted volume level: " + vol);
 
