@@ -39,7 +39,15 @@ namespace TheLivingRoom
         // Play Sound
         public void Play()
         {
+            DispatcherTimer timer = new DispatcherTimer();
             _sample.Play();
+            timer.Interval = TimeSpan.FromSeconds(4);
+            timer.Start();
+            timer.Tick += (o, args) =>
+            {
+                timer.Stop();
+                _sample.Stop();
+            };
         }
 
         public void PlayPreview()

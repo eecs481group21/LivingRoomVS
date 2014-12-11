@@ -24,12 +24,9 @@ namespace TheLivingRoom_Kinect
     /// </summary>
     public partial class MainWindow : Window
     {
-        //private readonly Kinect _kinect;
-        //private Shape _lastHead = null;
         private Shape _lastHand;
         private Shape _lastLine;
         private Shape _lastHand2;
-        private const int NumRequiredSkeletons = 2;
         private const bool SingleUserDebug = false;
 
         public MainWindow()
@@ -81,6 +78,18 @@ namespace TheLivingRoom_Kinect
                 Kinect.GetInstance().StopKinect();
                 btnStart.Content = "Start";
             }
+        }
+
+        // Utility function to convert skeleton data to colorpoints for vizualization
+        static ColorImagePoint CreateColorImagePoint(CoordinateMapper mapper, SkeletonPoint skeletonPoint)
+        {
+            return mapper.MapSkeletonPointToColorPoint(skeletonPoint, ColorImageFormat.RgbResolution640x480Fps30);
+        }
+
+        // Utility function to convert skeleton data to colorpoints for vizualization
+        static DepthImagePoint CreateDepthImagePoint(CoordinateMapper mapper, SkeletonPoint skeletonPoint)
+        {
+            return mapper.MapSkeletonPointToDepthPoint(skeletonPoint, DepthImageFormat.Resolution640x480Fps30);   
         }
 
         // Function to run when the Kinect is reading data. We'll move this into 
@@ -137,42 +146,59 @@ namespace TheLivingRoom_Kinect
                 var skeleton2Position = (SingleUserDebug) ? skeleton1.Joints[JointType.HandRight].Position : 
                                                             skeleton2.Joints[JointType.Spine].Position;
 
+                var skeleton1LeftHandPosition = skeleton1.Joints[JointType.HandLeft].Position;
+                var skeleton1RightHandPosition = skeleton1.Joints[JointType.HandRight].Position;
+                // If debugging, only worry about one user's hands
+                var skeleton2LeftHandPosition = (SingleUserDebug) ? skeleton1.Joints[JointType.HandLeft].Position : 
+                                                                    skeleton2.Joints[JointType.HandLeft].Position;
+                var skeleton2RightHandPosition = (SingleUserDebug) ? skeleton1.Joints[JointType.HandRight].Position :
+                                                                     skeleton2.Joints[JointType.HandRight].Position;
+
                 var mapper = new CoordinateMapper(Kinect.GetInstance().Sensor);
 
-                //var colorPointHead1 = mapper.MapSkeletonPointToColorPoint(headPosition1,
-                //ColorImageFormat.RgbResolution640x480Fps30);
-                var colorPointHand1 = mapper.MapSkeletonPointToColorPoint(skeleton1Position,
-                   ColorImageFormat.RgbResolution640x480Fps30);
-                var colorPointHand2 = mapper.MapSkeletonPointToColorPoint(skeleton2Position,
-                   ColorImageFormat.RgbResolution640x480Fps30);
+                // Used for visualizing the bodies in the frame
+                var colorPointSkeleton1 = CreateColorImagePoint(mapper, skeleton1Position);
+                var colorPointSkeleton2 = CreateColorImagePoint(mapper, skeleton2Position);
 
-                //var depthPointHead1 = mapper.MapSkeletonPointToDepthPoint(headPosition1,
-                //DepthImageFormat.Resolution640x480Fps30);
-                var depthPointHand1 = mapper.MapSkeletonPointToDepthPoint(skeleton1Position,
-                    DepthImageFormat.Resolution640x480Fps30);
-                var depthPointHand2 = mapper.MapSkeletonPointToDepthPoint(skeleton2Position,
-                    DepthImageFormat.Resolution640x480Fps30);
+                // Data abour where the bodies in the frame are in space
+                var depthPointSkeleton1 = CreateDepthImagePoint(mapper, skeleton1Position);
+                var depthPointSkeleton2 = CreateDepthImagePoint(mapper, skeleton2Position);
 
-                double deltaDist = Kinect.GetInstance().GetDistance(depthPointHand1, depthPointHand2) / 12.0;
+                double deltaDist = Kinect.GetInstance().GetDistance(depthPointSkeleton1, depthPointSkeleton2) / 12.0;
                 Kinect.GetInstance().LogDist(deltaDist);
-                // These are the same as above for the demo. Will be replaced to only correspond with hands in production
-                Kinect.GetInstance().LogContact(depthPointHand1, depthPointHand2);
+
+                // Data about where the bodies in frames' hands are in space
+                var depthPointSkeleton1LeftHand  = CreateDepthImagePoint(mapper, skeleton1LeftHandPosition);
+                var depthPointSkeleton1RightHand = CreateDepthImagePoint(mapper, skeleton1RightHandPosition);
+                var depthPointSkeleton2LeftHand  = CreateDepthImagePoint(mapper, skeleton2LeftHandPosition);
+                var depthPointSkeleton2RightHand = CreateDepthImagePoint(mapper, skeleton2RightHandPosition);
+
+                // Log if hand contact was made by users in this frame
+                if (SingleUserDebug)
+                {
+                    Kinect.GetInstance().LogContact(depthPointSkeleton1LeftHand, depthPointSkeleton1RightHand);    
+                }
+                else
+                {
+                    Kinect.GetInstance().LogContact(depthPointSkeleton1LeftHand, depthPointSkeleton1RightHand,
+                                                    depthPointSkeleton2LeftHand, depthPointSkeleton2RightHand);    
+                }
+                
+                
+                // Update distance between users on view
                 textBlockDistInches.Text = Math.Round(deltaDist, 4).ToString(CultureInfo.InvariantCulture);
 
-                //canvasFeed.Children.Remove(lastHead);
+                // Manipulate the image stream to show new points
+
                 canvasFeed.Children.Remove(_lastHand);
                 canvasFeed.Children.Remove(_lastHand2);
                 canvasFeed.Children.Remove(_lastLine);
 
-
-                //Line headToHandLine = DrawLine(colorPointHead1, colorPointHand1);
-                Line headToHandLine = DrawLine(colorPointHand2, colorPointHand1);
+                Line headToHandLine = DrawLine(colorPointSkeleton2, colorPointSkeleton1);
                 _lastLine = headToHandLine;
-                //Shape circle = CreateCircle(colorPointHead1);
-                Shape circle = CreateCircle(colorPointHand2);
-                //lastHead = circle;
+                Shape circle = CreateCircle(colorPointSkeleton2);
                 _lastHand2 = circle;
-                Shape circle2 = CreateCircle(colorPointHand1);
+                Shape circle2 = CreateCircle(colorPointSkeleton1);
                 _lastHand = circle2;
                 canvasFeed.Children.Add(circle);
                 canvasFeed.Children.Add(circle2);
@@ -180,7 +206,7 @@ namespace TheLivingRoom_Kinect
             }
         }
 
-        private Line DrawLine(ColorImagePoint a, ColorImagePoint b)
+        private static Line DrawLine(ColorImagePoint a, ColorImagePoint b)
         {
             var line = new Line
             {
@@ -195,7 +221,7 @@ namespace TheLivingRoom_Kinect
             return line;
         }
 
-        private Shape CreateCircle(ColorImagePoint colorPoint)
+        private static Shape CreateCircle(ColorImagePoint colorPoint)
         {
             var circle = new Ellipse
             {

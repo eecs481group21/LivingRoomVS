@@ -102,7 +102,7 @@ namespace TheLivingRoom
                 return SystemVolumeLimit;
             }
 
-            // Assume default, no parameter volume level is 3/ volume limit
+            // Assume default, no parameter volume level is 2/ volume limit
             double playbackVolume = SystemVolumeLimit * 0.5;
 
             // Set maximum volume adjustment factor per parameter such that
@@ -122,6 +122,14 @@ namespace TheLivingRoom
                 }
             }
 
+            if (playbackVolume < 0 || playbackVolume > 1)
+            {
+                Debug.WriteLine("Something messed up");
+            }
+            else
+            {
+                Debug.WriteLine("New volume is " + playbackVolume);
+            }
             return playbackVolume;
         }
 
@@ -136,9 +144,15 @@ namespace TheLivingRoom
             return count;
         }
 
-        private double GetDistanceMultiplier(double distance)
+        private static double GetDistanceMultiplier(double distance)
         {
-            return (ZeroedDistance - distance) / ZeroedDistance;
+            double multiplier = (ZeroedDistance - distance) / ZeroedDistance;
+            if (multiplier <= -1)
+            {
+                // Boundary of calculation
+                return -1;
+            }
+            return multiplier;
         }
 
         private void FetchLatestParameterValues()
@@ -157,8 +171,8 @@ namespace TheLivingRoom
             if (handContact != null)
             {
                 bool handContactCast = Convert.ToBoolean((string)handContact);
-                Parameters[1].AdjustLevel(handContactCast ? 0.5 : -0.5);
-                Debug.WriteLine("Hand Multiplyer: " + (handContactCast ? 0.5 : -0.5));
+                Parameters[1].AdjustLevel(handContactCast ? 1 : 0);
+                Debug.WriteLine("Hand Multiplyer: " + (handContactCast ? 1 : 0));
             }
             
         }

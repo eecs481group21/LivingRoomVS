@@ -77,6 +77,11 @@ namespace TheLivingRoom_Kinect
             return true;
         }
 
+        /*****************************************************************
+        * Function: StartKinect
+        * Description: Starts the Kinect and enables it to recieve input.
+        * Parameters: None
+        ******************************************************************/
         public void StartKinect() 
         {
             _sensor.Start();
@@ -137,13 +142,29 @@ namespace TheLivingRoom_Kinect
          * Function: LogContact
          * Description: Use the Motion Tracker class to log the data
          * Parameters: 
-         *      DepthImagePoint a, b: DepthImageFrames recieved from the 
+         *      DepthImagePoint left1, right1, left2, right2: 
+         *                            DepthImageFrames recieved from the 
         *                             Kinect. The internal data should 
         *                             not be manipulated in any way.
         *****************************************************************/
-        public void LogContact(DepthImagePoint a, DepthImagePoint b)
+        public void LogContact(DepthImagePoint left1, DepthImagePoint right1, DepthImagePoint left2, DepthImagePoint right2)
         {
-            _motionTracker.LogContact(a, b);
+            _motionTracker.LogContact(left1, right1, left2, right2);
+        }
+
+        /*****************************************************************
+         * Function: LogContact
+         * Description: Use the Motion Tracker class to log the data
+         * Parameters: 
+         *      DepthImagePoint left1, right1: 
+         *                            DepthImageFrames recieved from the 
+        *                             Kinect. The internal data should 
+        *                             not be manipulated in any way. This
+         *                            function is only used for debugging
+        *****************************************************************/
+        public void LogContact(DepthImagePoint left1, DepthImagePoint right1)
+        {
+            _motionTracker.LogContact(left1, right1);
         }
 
         public double GetDistChangeRatio()
@@ -169,8 +190,14 @@ namespace TheLivingRoom_Kinect
             return _motionTracker.GetLastDistance();
         }
 
+        /*****************************************************************
+         * Class: MotionTracker
+         * Description: Analyze Kinect datapoints to interpolate 
+         * characteristics such as speed and distance
+         *****************************************************************/
         internal class MotionTracker
         {
+            // Containers storing data from past frames
             private readonly FixedLengthQueue<double> _pastDistances;
             private readonly FixedLengthQueue<bool> _pastContact;
             private const int Fps = 30; // Frames per second
@@ -301,14 +328,36 @@ namespace TheLivingRoom_Kinect
              * Description: Log a value of the current contact in the 
              *              list of the previous Fps*CaptureWindow instances
              * Parameters: 
-             *      DepthImagePoint a, b: DepthImageFrames recieved from the 
+             *      DepthImagePoint left1, right1, left2, right 2: 
+             *                            DepthImageFrames recieved from the 
              *                            Kinect. The internal data should 
              *                            not be manipulated in any way. These 
              *                            values represent the hands of users.
             *****************************************************************/
-            public void LogContact(DepthImagePoint a, DepthImagePoint b)
+            public void LogContact(DepthImagePoint left1, DepthImagePoint right1, DepthImagePoint left2, DepthImagePoint right2)
             {
-                bool contact =  GetDistance(a, b)/12.0 < TouchTolerance;
+                bool contact =  GetDistance(left1, right2)  / 12.0 < TouchTolerance ||
+                                GetDistance(left1, left2)   / 12.0 < TouchTolerance ||
+                                GetDistance(right1, right2) / 12.0 < TouchTolerance ||
+                                GetDistance(right1, left2)  / 12.0 < TouchTolerance;
+                _pastContact.Enqueue(contact);
+            }
+
+            /*****************************************************************
+            * Function: LogContact
+            * Description: Log a value of the current contact in the 
+            *              list of the previous Fps*CaptureWindow instances
+            * Parameters: 
+            *      DepthImagePoint left1, right1: 
+            *                            DepthImageFrames recieved from the 
+            *                            Kinect. The internal data should 
+            *                            not be manipulated in any way. These 
+            *                            values represent the hands of users.
+             *                           This function is only used for debugging.
+           *****************************************************************/
+            public void LogContact(DepthImagePoint left1, DepthImagePoint right1)
+            {
+                bool contact = GetDistance(left1, right1)/12.0 < TouchTolerance;
                 _pastContact.Enqueue(contact);
             }
 
